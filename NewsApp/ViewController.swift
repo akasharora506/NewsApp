@@ -10,7 +10,14 @@ import UIKit
 class ViewController: UIViewController, UITableViewDelegate {
     
     let tableView = UITableView()
-    
+    let header: UILabel = {
+        let header = UILabel()
+        header.backgroundColor = .purple
+        header.text = "Apple News"
+        header.textColor = .white
+        header.textAlignment = .center
+        return header
+    }()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(tableView)
@@ -20,11 +27,14 @@ class ViewController: UIViewController, UITableViewDelegate {
         tableView.dataSource = self
         tableView.estimatedRowHeight = 200
         tableView.rowHeight = UITableView.automaticDimension
+        view.addSubview(header)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        tableView.frame = view.bounds
+        header.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 100)
+        
+        tableView.frame = CGRect(x: 0, y: 100, width: view.frame.width, height: view.frame.height - 100)
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120
