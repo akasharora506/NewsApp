@@ -1,10 +1,3 @@
-//
-//  ViewController.swift
-//  NewsApp
-//
-//  Created by Akash Arora on 11/04/22.
-//
-
 import UIKit
 
 class ViewController: UIViewController, UITableViewDelegate {
@@ -16,6 +9,7 @@ class ViewController: UIViewController, UITableViewDelegate {
         header.text = "Apple News"
         header.textColor = .white
         header.textAlignment = .center
+        header.font = .systemFont(ofSize: 24, weight: .bold)
         return header
     }()
     override func viewDidLoad() {
@@ -25,9 +19,8 @@ class ViewController: UIViewController, UITableViewDelegate {
         tableView.backgroundColor = .systemGray6
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.estimatedRowHeight = 200
-        tableView.rowHeight = UITableView.automaticDimension
         view.addSubview(header)
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -60,7 +53,27 @@ extension ViewController: UITableViewDataSource{
             cell.configureButton(labelName: "Top Headlines", buttonName: "View Top Headlines")
             cell.searchBar.isHidden = true
         };
+        cell.selectionStyle = .none
+        cell.button.tag = indexPath.row
+        cell.button.addTarget(self, action: #selector(onClick(sender:)), for: .touchUpInside)
         return cell
+    }
+    @objc func onClick(sender: UIButton!){
+        let svc = SearchViewController()
+//        let mvc = MapViewController()
+        let thvc = TopHeadlinesViewController()
+            let section = sender.tag / 100
+            let row = sender.tag % 100
+        let indexPath = NSIndexPath(row: row, section: section)
+        if(sender.tag == 0){
+            let cell = tableView.cellForRow(at: indexPath as IndexPath) as! TableViewCell
+            svc.configureHeader(queryText: cell.searchBar.text!)
+            present(svc, animated: true)
+        }
+//        else if(sender.tag == 1){ present(mvc, animated: true) }
+        else if(sender.tag == 2){
+            present(thvc, animated: true)
+        }
     }
     
 }

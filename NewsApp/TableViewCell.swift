@@ -1,23 +1,28 @@
 import UIKit
 
 class TableViewCell: UITableViewCell {
+    
     static let identifier = "customCell"
-    internal let searchBar: UISearchTextField = {
+    
+    let searchBar: UISearchTextField = {
        let searchBar = UISearchTextField()
         searchBar.textColor = .darkGray
         searchBar.placeholder = "Search"
         return searchBar
     }()
+    
     internal let termSearch: UILabel = {
         let termSearch = UILabel()
         termSearch.textColor = .darkGray
         return termSearch
     }()
+    
     internal let button: UIButton = {
         let button = UIButton()
         button.setTitleColor(.blue, for: .normal)
         return button
     }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(termSearch)
