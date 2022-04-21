@@ -48,8 +48,8 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
                 self?.viewModels = articles.compactMap({
                     NewsTableViewCellViewModel(
                         title: $0.title,
-                        subTitle: $0.description ,
-                        imageURL: URL(string: $0.urlToImage )
+                        subTitle: $0.description ?? "No Description",
+                        imageURL: URL(string: $0.urlToImage ?? "")
                     )
                 })
                 DispatchQueue.main.async {
@@ -82,7 +82,7 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
         return 150
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let url = URL(string: articles[indexPath.row].url ) else {
+        guard let url = URL(string: articles[indexPath.row].url ?? "" ) else {
             return
         }
         let vc = SFSafariViewController(url: url)
