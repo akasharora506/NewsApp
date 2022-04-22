@@ -29,10 +29,10 @@ class SearchViewController: UIViewController {
         view.addSubview(header)
         view.addSubview(sourcesLabel)
         view.addSubview(tableView)
-        APIservices.shared.getQueryHeadlines(queryText: searchText){ result in
+        APIservices.shared.getQueryHeadlines(queryText: searchText){ [weak self] result in
             switch result {
             case .success(let articles):
-                self.viewModels = articles.compactMap({
+                self?.viewModels = articles.compactMap({
                     NewsTableViewCellViewModel(
                         title: $0.title,
                         subTitle: $0.description ?? "No Description",
@@ -40,7 +40,7 @@ class SearchViewController: UIViewController {
                     )
                 })
                 DispatchQueue.main.async {
-                    self.tableView.reloadData()
+                    self?.tableView.reloadData()
                 }
             case .failure(let error):
                 print(error)
