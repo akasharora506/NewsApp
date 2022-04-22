@@ -1,8 +1,11 @@
 import UIKit
+import SafariServices
 
 class SearchViewController: UIViewController {
     private var searchText = ""
+    private var currentPage = 1
     private var viewModels = [NewsTableViewCellViewModel]()
+    private var articles = [Article]()
     let tableView = UITableView()
     let header :UILabel = {
        let header = UILabel()
@@ -29,9 +32,10 @@ class SearchViewController: UIViewController {
         view.addSubview(header)
         view.addSubview(sourcesLabel)
         view.addSubview(tableView)
-        APIservices.shared.getQueryHeadlines(queryText: searchText){ [weak self] result in
+        APIservices.shared.getQueryHeadlines(queryText: searchText,pageNumber: currentPage){ [weak self] result in
             switch result {
             case .success(let articles):
+                self?.articles = articles
                 self?.viewModels = articles.compactMap({
                     NewsTableViewCellViewModel(
                         title: $0.title,
@@ -72,6 +76,13 @@ extension SearchViewController : UITableViewDataSource, UITableViewDelegate {
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 150
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let url = URL(string: articles[indexPath.row].url ?? "" ) else {
+            return
+        }
+        let vc = SFSafariViewController(url: url)
+        present(vc, animated: true)
     }
     
 }
