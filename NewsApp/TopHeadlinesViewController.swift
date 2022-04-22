@@ -7,6 +7,7 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
     private var currentPage = 1
     private var viewModels = [NewsTableViewCellViewModel]()
     private var pages = 0
+    var selectedSource = ""
     var articles = [Article]()
     var totalArticles = 0
     let header: UILabel = {
@@ -99,7 +100,7 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
         present(vc, animated: true)
     }
     func updateTableData(){
-        APIservices.shared.getTopHeadlines(pageNumber: currentPage){
+        APIservices.shared.getTopHeadlines(pageNumber: currentPage, sources: selectedSource ){
             [weak self] result, countArticles in
             self?.totalArticles = countArticles
             switch result {

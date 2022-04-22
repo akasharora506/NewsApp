@@ -3,13 +3,16 @@ import UIKit
 class SourceTableViewCellViewModel {
     let title: String
     let description: String
+    let id: String
   
     init(
+        id: String,
         title: String,
         description: String
     ){
         self.title = title
         self.description = description
+        self.id = id
     }
 }
 

@@ -5,11 +5,17 @@ final class APIservices {
     static let shared = APIservices()
     struct Constants {
         static let topHeadlinesURL = "https://newsapi.org/v2/top-headlines?country=in&apiKey=c0116bfb153f43298374663b7e1379d2&pageSize=10"
+        static let topHeadlinesURLwithSource = "https://newsapi.org/v2/top-headlines?apiKey=c0116bfb153f43298374663b7e1379d2&pageSize=10"
     }
     private init(){}
 // API
-    public func getTopHeadlines(pageNumber: Int,completion: @escaping (Result<[Article], Error>,Int)->Void){
-        guard let url = URL(string: Constants.topHeadlinesURL+"&page=\(pageNumber)") else {
+    public func getTopHeadlines(pageNumber: Int,sources: String,completion: @escaping (Result<[Article], Error>,Int)->Void){
+        var url = ""
+        if(sources != ""){ url = Constants.topHeadlinesURLwithSource+"&page=\(pageNumber)" + "&sources=\(sources)" }else{
+            url = Constants.topHeadlinesURL+"&page=\(pageNumber)"
+        }
+        print(url)
+        guard let url = URL(string: url) else {
             return
         }
         let task = URLSession.shared.dataTask(with: url){data, _, error in

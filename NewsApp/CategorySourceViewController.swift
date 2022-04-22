@@ -36,7 +36,12 @@ class CategorySourceViewController: UIViewController {
         currView.text = "business"
         return currView
     }()
-   
+    let skipButton :UIButton = {
+       let button = UIButton()
+        button.setTitle("SKIP (SEARCH ALL SOURCE)", for: .normal)
+        button.setTitleColor(.blue, for: .normal)
+        return button
+    }()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGray6
@@ -56,16 +61,25 @@ class CategorySourceViewController: UIViewController {
         categoryMenu.selectionAction = { index, title in
             self.onSelectCategory(index: index, title: title)
         }
+        view.addSubview(skipButton)
+        skipButton.addTarget(self, action: #selector(didSkipSources(sender:)), for: .touchUpInside)
     }
     @objc func didOpenMenu(){
         categoryMenu.show()
     }
+    
+    @objc func didSkipSources(sender: UIButton){
+        let thvc = TopHeadlinesViewController()
+        show(thvc, sender: self)
+    }
+    
     override func viewDidLayoutSubviews() {
         header.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 100)
         textBox.frame = CGRect(x: 20, y: 100, width: view.frame.width - 40, height: 100)
         categoryMenu.anchorView = header
-        tableView.frame = CGRect(x: 0, y: 200, width: view.frame.width, height: view.frame.height - 200)
+        tableView.frame = CGRect(x: 0, y: 200, width: view.frame.width, height: view.frame.height - 300)
         currView.frame = textBox.bounds
+        skipButton.frame = CGRect(x: 0, y: view.frame.height - 100, width: view.frame.width, height: 100)
     }
     func onSelectCategory(index: Int, title: String){
         currView.text = title
@@ -79,6 +93,7 @@ class CategorySourceViewController: UIViewController {
             case .success(let sources):
                 self?.viewModels = sources.compactMap({
                     SourceTableViewCellViewModel(
+                        id: $0.id,
                         title: $0.name,
                         description:  $0.description ?? "No Description"
                     )
@@ -110,5 +125,10 @@ extension CategorySourceViewController: UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 150
     }
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let thvc = TopHeadlinesViewController()
+        thvc.selectedSource = viewModels[indexPath.row].id
+        show(thvc, sender: self)
+        
+    }
 }
