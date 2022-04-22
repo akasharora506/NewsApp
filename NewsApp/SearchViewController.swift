@@ -15,14 +15,14 @@ class SearchViewController: UIViewController {
         header.textColor = .white
         return header
     }()
-    let sourcesLabel :UILabel = {
-       let header = UILabel()
-        header.text = "Sources"
-        header.textColor = .darkGray
-        header.textAlignment = .center
-        return header
-    }()
-  
+//    let sourcesLabel :UILabel = {
+//       let header = UILabel()
+//        header.text = "Sources"
+//        header.textColor = .darkGray
+//        header.textAlignment = .center
+//        return header
+//    }()
+//
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.identifier)
@@ -30,15 +30,15 @@ class SearchViewController: UIViewController {
         tableView.dataSource = self
         view.backgroundColor = .systemGray6
         view.addSubview(header)
-        view.addSubview(sourcesLabel)
+//        view.addSubview(sourcesLabel)
         view.addSubview(tableView)
         fetchData()
         
     }
     override func viewDidLayoutSubviews() {
         header.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 100)
-        sourcesLabel.frame = CGRect(x: 0, y: header.frame.height, width: view.frame.width, height: 100)
-        tableView.frame = CGRect(x: 0, y: header.frame.height + sourcesLabel.frame.height, width: view.frame.width, height: view.frame.height - header.frame.height - sourcesLabel.frame.height)
+//        sourcesLabel.frame = CGRect(x: 0, y: header.frame.height, width: view.frame.width, height: 100)
+        tableView.frame = CGRect(x: 0, y: header.frame.height, width: view.frame.width, height: view.frame.height - header.frame.height)
     }
     func configureHeader(queryText: String){
         searchText = queryText

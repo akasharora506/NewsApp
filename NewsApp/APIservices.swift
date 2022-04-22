@@ -7,7 +7,7 @@ final class APIservices {
         static let topHeadlinesURL = "https://newsapi.org/v2/top-headlines?country=in&apiKey=c0116bfb153f43298374663b7e1379d2&pageSize=10"
     }
     private init(){}
-    
+// API
     public func getTopHeadlines(pageNumber: Int,completion: @escaping (Result<[Article], Error>,Int)->Void){
         guard let url = URL(string: Constants.topHeadlinesURL+"&page=\(pageNumber)") else {
             return
@@ -46,6 +46,25 @@ final class APIservices {
         }
         task.resume()
     }
+    public func getSources(for category: String,completion: @escaping(Result<[SourceDetail],Error>)->Void){
+        guard let url = URL(string: "https://newsapi.org/v2/top-headlines/sources?apiKey=c0116bfb153f43298374663b7e1379d2&category=\(category)") else {
+            return
+        }
+        let task = URLSession.shared.dataTask(with: url){data, _, error in
+            if let error = error {
+                completion(.failure(error))
+            }else if let data = data {
+                do{
+                    let result = try JSONDecoder().decode(SourceAPIResponse.self, from: data)
+                    completion(.success(result.sources))
+                }catch{
+                    completion(.failure(error))
+                }
+            }
+            
+        }
+        task.resume()
+    }
 }
 
 //Models
@@ -66,4 +85,16 @@ struct Article: Codable{
 
 struct Source: Codable{
     let name: String
+}
+
+//Model for Sources
+
+struct SourceAPIResponse: Codable {
+    let sources: Array<SourceDetail>
+}
+
+struct SourceDetail: Codable {
+    let id: String
+    let name: String
+    let description: String?
 }

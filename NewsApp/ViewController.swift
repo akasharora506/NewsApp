@@ -61,10 +61,11 @@ extension ViewController: UITableViewDataSource{
     @objc func onClick(sender: UIButton!){
         let svc = SearchViewController()
 //        let mvc = MapViewController()
-        let thvc = TopHeadlinesViewController()
+//        let thvc = TopHeadlinesViewController()
             let section = sender.tag / 100
             let row = sender.tag % 100
         let indexPath = NSIndexPath(row: row, section: section)
+        let csvc = CategorySourceViewController()
         if(sender.tag == 0){
             let cell = tableView.cellForRow(at: indexPath as IndexPath) as! TableViewCell
             if cell.searchBar.text! == "" {
@@ -78,7 +79,7 @@ extension ViewController: UITableViewDataSource{
         }
 //        else if(sender.tag == 1){ present(mvc, animated: true) }
         else if(sender.tag == 2){
-            present(thvc, animated: true)
+            present(csvc, animated: true)
         }
     }
     
