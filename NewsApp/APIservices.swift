@@ -29,6 +29,24 @@ final class APIservices {
         task.resume()
         
     }
+    public func getQueryHeadlines(queryText: String,completion: @escaping(Result<[Article],Error>)->Void){
+        guard let url = URL(string: "https://newsapi.org/v2/everything?q=\(queryText)&apiKey=0d8efc4eb1c44e22bbe93459486fdf57") else {
+            return
+        }
+        let task = URLSession.shared.dataTask(with: url){data, _, error in
+            if let error = error {
+                completion(.failure(error))
+            }else if let data = data {
+                do{
+                    let result = try JSONDecoder().decode(APIrespones.self, from: data)
+                    completion(.success(result.articles))
+                }catch{
+                    completion(.failure(error))
+                }
+            }
+        }
+        task.resume()
+    }
 }
 
 //Models

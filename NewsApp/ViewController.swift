@@ -67,8 +67,14 @@ extension ViewController: UITableViewDataSource{
         let indexPath = NSIndexPath(row: row, section: section)
         if(sender.tag == 0){
             let cell = tableView.cellForRow(at: indexPath as IndexPath) as! TableViewCell
-            svc.configureHeader(queryText: cell.searchBar.text!)
-            present(svc, animated: true)
+            if cell.searchBar.text! == "" {
+                let alert = UIAlertController(title: "No Input", message: "Please input query text in the searchbar or visit top headlines", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }else{
+                svc.configureHeader(queryText: cell.searchBar.text!)
+                present(svc, animated: true)
+            }
         }
 //        else if(sender.tag == 1){ present(mvc, animated: true) }
         else if(sender.tag == 2){

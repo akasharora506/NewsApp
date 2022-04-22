@@ -5,7 +5,7 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
 
     let tableView = UITableView()
     
-    var viewModels = [NewsTableViewCellViewModel]()
+    private var viewModels = [NewsTableViewCellViewModel]()
     var articles = [Article]()
     
     let header: UILabel = {

@@ -1,7 +1,8 @@
 import UIKit
 
 class SearchViewController: UIViewController {
-    
+    private var searchText = ""
+    private var viewModels = [NewsTableViewCellViewModel]()
     let tableView = UITableView()
     let header :UILabel = {
        let header = UILabel()
@@ -21,13 +22,31 @@ class SearchViewController: UIViewController {
   
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.identifier)
         tableView.delegate = self
         tableView.dataSource = self
         view.backgroundColor = .systemGray6
         view.addSubview(header)
         view.addSubview(sourcesLabel)
         view.addSubview(tableView)
+        APIservices.shared.getQueryHeadlines(queryText: searchText){ result in
+            switch result {
+            case .success(let articles):
+                self.viewModels = articles.compactMap({
+                    NewsTableViewCellViewModel(
+                        title: $0.title,
+                        subTitle: $0.description ?? "No Description",
+                        imageURL: URL(string: $0.urlToImage ?? "")
+                    )
+                })
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            case .failure(let error):
+                print(error)
+                
+            }
+        }
         
     }
     override func viewDidLayoutSubviews() {
@@ -36,16 +55,24 @@ class SearchViewController: UIViewController {
         tableView.frame = CGRect(x: 0, y: header.frame.height + sourcesLabel.frame.height, width: view.frame.width, height: view.frame.height - header.frame.height - sourcesLabel.frame.height)
     }
     func configureHeader(queryText: String){
+        searchText = queryText
         header.text = "Search Results for \(queryText)"
     }
 }
 extension SearchViewController : UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return viewModels.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell")!
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier) as? NewsTableViewCell else {
+            fatalError()
+        }
+        cell.configure(with: viewModels[indexPath.row])
         return cell
     }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 150
+    }
+    
 }
 
