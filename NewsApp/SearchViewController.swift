@@ -32,25 +32,7 @@ class SearchViewController: UIViewController {
         view.addSubview(header)
         view.addSubview(sourcesLabel)
         view.addSubview(tableView)
-        APIservices.shared.getQueryHeadlines(queryText: searchText,pageNumber: currentPage){ [weak self] result in
-            switch result {
-            case .success(let articles):
-                self?.articles = articles
-                self?.viewModels = articles.compactMap({
-                    NewsTableViewCellViewModel(
-                        title: $0.title,
-                        subTitle: $0.description ?? "No Description",
-                        imageURL: URL(string: $0.urlToImage ?? "")
-                    )
-                })
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                }
-            case .failure(let error):
-                print(error)
-                
-            }
-        }
+        fetchData()
         
     }
     override func viewDidLayoutSubviews() {
@@ -84,6 +66,44 @@ extension SearchViewController : UITableViewDataSource, UITableViewDelegate {
         let vc = SFSafariViewController(url: url)
         present(vc, animated: true)
     }
-    
+    func fetchData(){
+        APIservices.shared.getQueryHeadlines(queryText: searchText,pageNumber: currentPage){ [weak self] result in
+            switch result {
+            case .success(let articles):
+                self?.articles.append(contentsOf: articles)
+                self?.viewModels.append(contentsOf: articles.compactMap({
+                    NewsTableViewCellViewModel(
+                        title: $0.title,
+                        subTitle: $0.description ?? "No Description",
+                        imageURL: URL(string: $0.urlToImage ?? "")
+                    )
+                }))
+                DispatchQueue.main.async {
+                    self?.tableView.tableFooterView = nil
+                    self?.tableView.reloadData()
+                }
+            case .failure(let error):
+                print(error)
+                
+            }
+        }
+    }
 }
 
+extension SearchViewController: UIScrollViewDelegate{
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if(scrollView.contentOffset.y > tableView.contentSize.height - 100 - scrollView.frame.height){
+            currentPage+=1
+            self.tableView.tableFooterView = createSpinnerFooter()
+            fetchData()
+        }
+    }
+    private func createSpinnerFooter()->UIView{
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 100))
+        let spinner = UIActivityIndicatorView()
+        spinner.center = footerView.center
+        footerView.addSubview(spinner)
+        spinner.startAnimating()
+        return footerView
+    }
+}
