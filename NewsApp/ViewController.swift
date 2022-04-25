@@ -72,13 +72,19 @@ extension ViewController: UITableViewDataSource{
                 alert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }else{
+                let navSVC = UINavigationController(rootViewController: svc)
                 svc.configureHeader(queryText: cell.searchBar.text!)
-                present(svc, animated: true)
+                navSVC.modalPresentationStyle = .fullScreen
+                present(navSVC, animated: true)
             }
-        }
-        else if(sender.tag == 1){ present(mvc, animated: true) }
-        else if(sender.tag == 2){
-            present(csvc, animated: true)
+        }else if(sender.tag == 1){
+            let navMVC = UINavigationController(rootViewController: mvc)
+            navMVC.modalPresentationStyle = .fullScreen
+            present(navMVC, animated: true)
+        }else if(sender.tag == 2){
+            let navCSVC = UINavigationController(rootViewController: csvc)
+            navCSVC.modalPresentationStyle = .fullScreen
+            present(navCSVC, animated: true)
         }
     }
     

@@ -44,6 +44,7 @@ class CategorySourceViewController: UIViewController {
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(onGoBack))
         view.backgroundColor = .systemGray6
         view.addSubview(header)
         tableView.register(SourceTableViewCell.self, forCellReuseIdentifier: SourceTableViewCell.identifier)
@@ -64,6 +65,11 @@ class CategorySourceViewController: UIViewController {
         view.addSubview(skipButton)
         skipButton.addTarget(self, action: #selector(didSkipSources(sender:)), for: .touchUpInside)
     }
+    
+    @objc func onGoBack(){
+        dismiss(animated: true)
+    }
+    
     @objc func didOpenMenu(){
         categoryMenu.show()
     }

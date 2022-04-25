@@ -15,16 +15,10 @@ class SearchViewController: UIViewController {
         header.textColor = .white
         return header
     }()
-//    let sourcesLabel :UILabel = {
-//       let header = UILabel()
-//        header.text = "Sources"
-//        header.textColor = .darkGray
-//        header.textAlignment = .center
-//        return header
-//    }()
-//
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(onGoBack))
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.identifier)
         tableView.delegate = self
         tableView.dataSource = self
@@ -35,6 +29,11 @@ class SearchViewController: UIViewController {
         fetchData()
         
     }
+    
+    @objc func onGoBack(){
+        dismiss(animated: true, completion: nil)
+    }
+    
     override func viewDidLayoutSubviews() {
         header.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 100)
 //        sourcesLabel.frame = CGRect(x: 0, y: header.frame.height, width: view.frame.width, height: 100)
