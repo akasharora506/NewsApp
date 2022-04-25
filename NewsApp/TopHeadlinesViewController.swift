@@ -45,6 +45,7 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
         tableView.dataSource = self
         tableView.delegate = self
         view.backgroundColor = .white
+//        tableView.estimatedRowHeight = 150
         view.addSubview(header)
         view.addSubview(tableView)
         updateTableData()
