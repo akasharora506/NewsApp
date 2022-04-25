@@ -1,0 +1,24 @@
+PODS:
+  - DropDown (2.3.13)
+  - GoogleMaps (6.0.1):
+    - GoogleMaps/Maps (= 6.0.1)
+  - GoogleMaps/Base (6.0.1)
+  - GoogleMaps/Maps (6.0.1):
+    - GoogleMaps/Base
+
+DEPENDENCIES:
+  - DropDown
+  - GoogleMaps (= 6.0.1)
+
+SPEC REPOS:
+  trunk:
+    - DropDown
+    - GoogleMaps
+
+SPEC CHECKSUMS:
+  DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
+  GoogleMaps: c213fc2334b7374144cede914da779b99be0ab74
+
+PODFILE CHECKSUM: 3efb0a6c6da23e8fe464ecc4b3b731e0185ed8d1
+
+COCOAPODS: 1.11.3

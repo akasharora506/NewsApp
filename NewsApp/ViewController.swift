@@ -60,8 +60,7 @@ extension ViewController: UITableViewDataSource{
     }
     @objc func onClick(sender: UIButton!){
         let svc = SearchViewController()
-//        let mvc = MapViewController()
-//        let thvc = TopHeadlinesViewController()
+        let mvc = MapViewController()
             let section = sender.tag / 100
             let row = sender.tag % 100
         let indexPath = NSIndexPath(row: row, section: section)
@@ -77,7 +76,7 @@ extension ViewController: UITableViewDataSource{
                 present(svc, animated: true)
             }
         }
-//        else if(sender.tag == 1){ present(mvc, animated: true) }
+        else if(sender.tag == 1){ present(mvc, animated: true) }
         else if(sender.tag == 2){
             present(csvc, animated: true)
         }

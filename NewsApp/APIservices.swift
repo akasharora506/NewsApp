@@ -3,9 +3,10 @@ import Foundation
 final class APIservices {
     
     static let shared = APIservices()
+    static internal let API_KEY = "c0116bfb153f43298374663b7e1379d2"
     struct Constants {
-        static let topHeadlinesURL = "https://newsapi.org/v2/top-headlines?country=in&apiKey=c0116bfb153f43298374663b7e1379d2&pageSize=10"
-        static let topHeadlinesURLwithSource = "https://newsapi.org/v2/top-headlines?apiKey=c0116bfb153f43298374663b7e1379d2&pageSize=10"
+        static let topHeadlinesURL = "https://newsapi.org/v2/top-headlines?country=in&apiKey=\(APIservices.API_KEY)&pageSize=10"
+        static let topHeadlinesURLwithSource = "https://newsapi.org/v2/top-headlines?apiKey=\(APIservices.API_KEY)&pageSize=10"
     }
     private init(){}
 // API
@@ -35,7 +36,7 @@ final class APIservices {
         
     }
     public func getQueryHeadlines(queryText: String,pageNumber: Int,completion: @escaping(Result<[Article],Error>)->Void){
-        guard let url = URL(string: "https://newsapi.org/v2/everything?q=\(queryText)&pageSize=10&page=\(pageNumber)&apiKey=c0116bfb153f43298374663b7e1379d2") else {
+        guard let url = URL(string: "https://newsapi.org/v2/everything?q=\(queryText)&pageSize=10&page=\(pageNumber)&apiKey=\(APIservices.API_KEY)") else {
             return
         }
         let task = URLSession.shared.dataTask(with: url){data, _, error in
@@ -53,7 +54,7 @@ final class APIservices {
         task.resume()
     }
     public func getSources(for category: String,completion: @escaping(Result<[SourceDetail],Error>)->Void){
-        guard let url = URL(string: "https://newsapi.org/v2/top-headlines/sources?apiKey=c0116bfb153f43298374663b7e1379d2&category=\(category)") else {
+        guard let url = URL(string: "https://newsapi.org/v2/top-headlines/sources?apiKey=\(APIservices.API_KEY)&category=\(category)") else {
             return
         }
         let task = URLSession.shared.dataTask(with: url){data, _, error in

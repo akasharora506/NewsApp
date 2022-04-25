@@ -8,6 +8,7 @@ class MapViewController: UIViewController, UITableViewDelegate {
         header.textColor = .white
         header.backgroundColor = .purple
         header.textAlignment = .center
+        header.font = .systemFont(ofSize: 24, weight: .bold)
         return header
     }()
     
