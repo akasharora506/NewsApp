@@ -87,6 +87,8 @@ extension ViewController: UITableViewDataSource, ButtonDelegate{
                 alert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }else{
+                csvc.searchText = cell.searchBar.text!
+                csvc.configureHeader(queryText: cell.searchBar.text!)
                 navigationController?.pushViewController(csvc, animated: true)
             }
         }else if(index.row == 1){

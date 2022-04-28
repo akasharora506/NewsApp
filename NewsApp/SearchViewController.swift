@@ -7,42 +7,51 @@ class SearchViewController: UIViewController {
     private var currentPage = 1
     private var viewModels = [NewsTableViewCellViewModel]()
     private var articles = [Article]()
-    let tableView = UITableView()
+    let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
     let header :UILabel = {
        let header = UILabel()
         header.font = .systemFont(ofSize: 24, weight: .bold)
         header.backgroundColor = .purple
         header.textAlignment = .center
         header.textColor = .white
+        header.translatesAutoresizingMaskIntoConstraints = false
         return header
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(onGoBack))
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.identifier)
         tableView.delegate = self
         tableView.dataSource = self
         view.backgroundColor = .systemGray6
         view.addSubview(header)
-//        view.addSubview(sourcesLabel)
         view.addSubview(tableView)
         fetchData()
+        addConstraints()
+    }
+    func addConstraints(){
+        var constraints = [NSLayoutConstraint]()
         
+        constraints.append(header.topAnchor.constraint(equalTo: view.topAnchor))
+        constraints.append(header.leadingAnchor.constraint(equalTo: view.leadingAnchor))
+        constraints.append(header.trailingAnchor.constraint(equalTo: view.trailingAnchor))
+        constraints.append(header.heightAnchor.constraint(equalToConstant: 100))
+        
+        constraints.append(tableView.topAnchor.constraint(equalTo: header.bottomAnchor))
+        constraints.append(tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
+        constraints.append(tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor))
+        constraints.append(tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor))
+        
+        NSLayoutConstraint.activate(constraints)
     }
-    
-    @objc func onGoBack(){
-        dismiss(animated: true, completion: nil)
-    }
-    
-    override func viewDidLayoutSubviews() {
-        header.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 100)
-//        sourcesLabel.frame = CGRect(x: 0, y: header.frame.height, width: view.frame.width, height: 100)
-        tableView.frame = CGRect(x: 0, y: header.frame.height, width: view.frame.width, height: view.frame.height - header.frame.height)
-    }
-    func configureHeader(queryText: String){
+
+    func configureHeader(queryText: String, sourceName: String){
         searchText = queryText
-        header.text = "Search Results for \(queryText)"
+        header.text = "\(sourceName) Results for \(queryText)"
     }
 }
 extension SearchViewController : UITableViewDataSource, UITableViewDelegate {

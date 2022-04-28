@@ -7,11 +7,11 @@ class CategorySourceViewController: UIViewController {
     var searchText = ""
     let header :UILabel = {
         let header = UILabel()
-        header.text = "Choose source"
         header.textColor = .white
         header.backgroundColor = .purple
         header.font = .systemFont(ofSize: 24, weight: .bold)
         header.textAlignment = .center
+        header.translatesAutoresizingMaskIntoConstraints = false
         return header
     }()
     
@@ -29,22 +29,32 @@ class CategorySourceViewController: UIViewController {
         return menu
     }()
     
-    let tableView = UITableView()
-    let textBox = UIView()
+    let tableView: UITableView={
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
+    let textBox: UIView={
+        let textBox = UIView()
+        textBox.translatesAutoresizingMaskIntoConstraints = false
+        return textBox
+    }()
     let currView :UILabel = {
         let currView = UILabel()
         currView.text = "business"
+        currView.textAlignment = .center
+        currView.translatesAutoresizingMaskIntoConstraints = false
         return currView
     }()
     let skipButton :UIButton = {
        let button = UIButton()
         button.setTitle("SKIP (SEARCH ALL SOURCE)", for: .normal)
         button.setTitleColor(.blue, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(onGoBack))
         view.backgroundColor = .systemGray6
         view.addSubview(header)
         tableView.register(SourceTableViewCell.self, forCellReuseIdentifier: SourceTableViewCell.identifier)
@@ -64,10 +74,7 @@ class CategorySourceViewController: UIViewController {
         }
         view.addSubview(skipButton)
         skipButton.addTarget(self, action: #selector(didSkipSources(sender:)), for: .touchUpInside)
-    }
-    
-    @objc func onGoBack(){
-        dismiss(animated: true)
+        addConstraints()
     }
     
     @objc func didOpenMenu(){
@@ -76,24 +83,51 @@ class CategorySourceViewController: UIViewController {
     
     @objc func didSkipSources(sender: UIButton){
         let svc = SearchViewController()
-        let navSVC = UINavigationController(rootViewController: svc)
-        svc.configureHeader(queryText: searchText)
-        navSVC.modalPresentationStyle = .fullScreen
-        present(navSVC, animated: true)
+        svc.configureHeader(queryText: searchText,sourceName: "")
+        navigationController?.pushViewController(svc, animated: true)
     }
     
-    override func viewDidLayoutSubviews() {
-        header.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 100)
-        textBox.frame = CGRect(x: 20, y: 100, width: view.frame.width - 40, height: 100)
+  
+    func addConstraints(){
+        var constraints = [NSLayoutConstraint]()
+        
+        constraints.append(header.topAnchor.constraint(equalTo: view.topAnchor))
+        constraints.append(header.leadingAnchor.constraint(equalTo: view.leadingAnchor))
+        constraints.append(header.trailingAnchor.constraint(equalTo: view.trailingAnchor))
+        constraints.append(header.heightAnchor.constraint(equalToConstant: 100))
+        
+        constraints.append(textBox.topAnchor.constraint(equalTo: header.bottomAnchor))
+        constraints.append(textBox.leadingAnchor.constraint(equalTo: view.leadingAnchor))
+        constraints.append(textBox.trailingAnchor.constraint(equalTo: view.trailingAnchor))
+        constraints.append(textBox.heightAnchor.constraint(equalToConstant: 100))
+        
         categoryMenu.anchorView = header
-        tableView.frame = CGRect(x: 0, y: 200, width: view.frame.width, height: view.frame.height - 300)
-        currView.frame = textBox.bounds
-        skipButton.frame = CGRect(x: 0, y: view.frame.height - 100, width: view.frame.width, height: 100)
+        
+        constraints.append(currView.topAnchor.constraint(equalTo: textBox.topAnchor))
+        constraints.append(currView.leadingAnchor.constraint(equalTo: textBox.leadingAnchor))
+        constraints.append(currView.trailingAnchor.constraint(equalTo: textBox.trailingAnchor))
+        constraints.append(currView.bottomAnchor.constraint(equalTo: textBox.bottomAnchor))
+        
+        constraints.append(tableView.topAnchor.constraint(equalTo: textBox.bottomAnchor))
+        constraints.append(tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor))
+        constraints.append(tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor))
+        constraints.append(tableView.heightAnchor.constraint(equalTo: view.heightAnchor,constant: -300))
+        
+        constraints.append(skipButton.topAnchor.constraint(equalTo: tableView.bottomAnchor))
+        constraints.append(skipButton.leadingAnchor.constraint(equalTo: view.leadingAnchor))
+        constraints.append(skipButton.trailingAnchor.constraint(equalTo: view.trailingAnchor))
+        constraints.append(skipButton.bottomAnchor.constraint(equalTo: view.bottomAnchor))
+        
+        NSLayoutConstraint.activate(constraints)
     }
+    
     func onSelectCategory(index: Int, title: String){
         currView.text = title
         fetchSources(title: title)
         
+    }
+    func configureHeader(queryText: String){
+        header.text = "Search for \(queryText)"
     }
     func fetchSources(title: String){
         APIservices.shared.getSources(for: title){
@@ -118,6 +152,7 @@ class CategorySourceViewController: UIViewController {
     }
     func configureSearchText(queryText: String){
         searchText = queryText
+        header.text = "Search for \(queryText)"
     }
 }
 
@@ -139,11 +174,9 @@ extension CategorySourceViewController: UITableViewDelegate, UITableViewDataSour
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let svc = SearchViewController()
-        let navSVC = UINavigationController(rootViewController: svc)
-        svc.configureHeader(queryText: searchText)
+        svc.configureHeader(queryText: searchText,sourceName: viewModels[indexPath.row].title)
         svc.selectedSource = viewModels[indexPath.row].id
-        navSVC.modalPresentationStyle = .fullScreen
-        present(navSVC, animated: true)
+        navigationController?.pushViewController(svc, animated: true)
         
     }
 }
