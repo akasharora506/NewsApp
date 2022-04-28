@@ -3,6 +3,7 @@ import SafariServices
 
 class SearchViewController: UIViewController {
     private var searchText = ""
+    var selectedSource = ""
     private var currentPage = 1
     private var viewModels = [NewsTableViewCellViewModel]()
     private var articles = [Article]()
@@ -66,7 +67,7 @@ extension SearchViewController : UITableViewDataSource, UITableViewDelegate {
         present(vc, animated: true)
     }
     func fetchData(){
-        APIservices.shared.getQueryHeadlines(queryText: searchText,pageNumber: currentPage){ [weak self] result in
+        APIservices.shared.getQueryHeadlines(queryText: searchText,pageNumber: currentPage, selectedSource: selectedSource){ [weak self] result in
             switch result {
             case .success(let articles):
                 self?.articles.append(contentsOf: articles)

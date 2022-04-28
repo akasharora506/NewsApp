@@ -40,6 +40,7 @@ class NewsTableViewCell: UITableViewCell {
         image.backgroundColor = .white
         image.layer.cornerRadius = 6
         image.layer.masksToBounds = true
+        image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
 
@@ -48,16 +49,32 @@ class NewsTableViewCell: UITableViewCell {
         contentView.addSubview(newsHeadline)
         contentView.addSubview(newsSubline)
         contentView.addSubview(newsImage)
+        addConstraints()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        newsHeadline.frame = CGRect(x: 10, y: 0, width: contentView.frame.width - 160, height: contentView.frame.height/2 - 5)
-        newsSubline.frame = CGRect(x: 10, y: 70, width: contentView.frame.width - 160, height: contentView.frame.height/2 - 5)
-        newsImage.frame = CGRect(x: contentView.frame.width - 150, y: 5, width: 140, height: contentView.frame.height - 10)
+        
+//        newsHeadline.frame = CGRect(x: 10, y: 0, width: contentView.frame.width - 160, height: contentView.frame.height/2 - 5)
+//        newsSubline.frame = CGRect(x: 10, y: 70, width: contentView.frame.width - 160, height: contentView.frame.height/2 - 5)
+//        newsImage.frame = CGRect(x: contentView.frame.width - 150, y: 5, width: 140, height: contentView.frame.height - 10)
         
     }
-    
+    func addConstraints(){
+        var constraints = [NSLayoutConstraint]()
+        
+        constraints.append(newsImage.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 1, constant: 0))
+        constraints.append(newsImage.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 1, constant: 0))
+        constraints.append(newsImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0))
+        constraints.append(newsImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0))
+        constraints.append(newsImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0))
+        
+//        constraints.append(newsHeadline.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10))
+//        constraints.append(newsHeadline.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10))
+//        constraints.append(newsHeadline.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 1))
+//        constraints.append(newsHeadline.heightAnchor.constraint(equalToConstant: 100))
+        NSLayoutConstraint.activate(constraints)
+    }
     override func prepareForReuse() {
         super.prepareForReuse()
         newsImage.image = nil

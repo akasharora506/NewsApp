@@ -4,7 +4,7 @@ import DropDown
 class CategorySourceViewController: UIViewController {
     
     var viewModels = [SourceTableViewCellViewModel]()
-    
+    var searchText = ""
     let header :UILabel = {
         let header = UILabel()
         header.text = "Choose source"
@@ -75,8 +75,11 @@ class CategorySourceViewController: UIViewController {
     }
     
     @objc func didSkipSources(sender: UIButton){
-        let thvc = TopHeadlinesViewController()
-        show(thvc, sender: self)
+        let svc = SearchViewController()
+        let navSVC = UINavigationController(rootViewController: svc)
+        svc.configureHeader(queryText: searchText)
+        navSVC.modalPresentationStyle = .fullScreen
+        present(navSVC, animated: true)
     }
     
     override func viewDidLayoutSubviews() {
@@ -113,6 +116,9 @@ class CategorySourceViewController: UIViewController {
            
         }
     }
+    func configureSearchText(queryText: String){
+        searchText = queryText
+    }
 }
 
 
@@ -132,9 +138,12 @@ extension CategorySourceViewController: UITableViewDelegate, UITableViewDataSour
         return 150
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let thvc = TopHeadlinesViewController()
-        thvc.selectedSource = viewModels[indexPath.row].id
-        show(thvc, sender: self)
+        let svc = SearchViewController()
+        let navSVC = UINavigationController(rootViewController: svc)
+        svc.configureHeader(queryText: searchText)
+        svc.selectedSource = viewModels[indexPath.row].id
+        navSVC.modalPresentationStyle = .fullScreen
+        present(navSVC, animated: true)
         
     }
 }

@@ -2,7 +2,11 @@ import UIKit
 
 class ViewController: UIViewController, UITableViewDelegate {
     
-    let tableView = UITableView()
+    let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
     let header: UILabel = {
         let header = UILabel()
         header.backgroundColor = .purple
@@ -10,32 +14,45 @@ class ViewController: UIViewController, UITableViewDelegate {
         header.textColor = .white
         header.textAlignment = .center
         header.font = .systemFont(ofSize: 24, weight: .bold)
+        header.translatesAutoresizingMaskIntoConstraints = false
         return header
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(tableView)
         tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.identifier)
         tableView.backgroundColor = .systemGray6
+        tableView.rowHeight = 120
+        tableView.estimatedRowHeight = 120
+        view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
         view.addSubview(header)
-        
+        addConstraints()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        header.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 100)
+    func addConstraints(){
+        var constraints = [NSLayoutConstraint]()
         
-        tableView.frame = CGRect(x: 0, y: 100, width: view.frame.width, height: view.frame.height - 100)
+        constraints.append(header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor))
+        constraints.append(header.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
+        constraints.append(header.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
+        constraints.append(header.heightAnchor.constraint(equalToConstant: 100))
+        
+        constraints.append(tableView.topAnchor.constraint(equalTo: header.bottomAnchor))
+        constraints.append(tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor))
+        constraints.append(tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
+        constraints.append(tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
+        
+        NSLayoutConstraint.activate(constraints)
     }
+   
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120
     }
     
 }
 
-extension ViewController: UITableViewDataSource{
+extension ViewController: UITableViewDataSource, ButtonDelegate{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
     }
@@ -54,39 +71,31 @@ extension ViewController: UITableViewDataSource{
             cell.searchBar.isHidden = true
         };
         cell.selectionStyle = .none
-        cell.button.tag = indexPath.row
-        cell.button.addTarget(self, action: #selector(onClick(sender:)), for: .touchUpInside)
+        cell.indexPath = indexPath
+        cell.delegate = self
         return cell
     }
-    @objc func onClick(sender: UIButton!){
-        let svc = SearchViewController()
+
+    func onButtonTap(at index: IndexPath) {
+        let thvc = TopHeadlinesViewController()
         let mvc = MapViewController()
-            let section = sender.tag / 100
-            let row = sender.tag % 100
-        let indexPath = NSIndexPath(row: row, section: section)
         let csvc = CategorySourceViewController()
-        if(sender.tag == 0){
-            let cell = tableView.cellForRow(at: indexPath as IndexPath) as! TableViewCell
+        if(index.row == 0){
+            let cell = tableView.cellForRow(at: index as IndexPath) as! TableViewCell
             if cell.searchBar.text! == "" {
                 let alert = UIAlertController(title: "No Input", message: "Please input query text in the searchbar or visit top headlines", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }else{
-                let navSVC = UINavigationController(rootViewController: svc)
-                svc.configureHeader(queryText: cell.searchBar.text!)
-                navSVC.modalPresentationStyle = .fullScreen
-                present(navSVC, animated: true)
+                navigationController?.pushViewController(csvc, animated: true)
             }
-        }else if(sender.tag == 1){
-            let navMVC = UINavigationController(rootViewController: mvc)
-            navMVC.modalPresentationStyle = .fullScreen
-            present(navMVC, animated: true)
-        }else if(sender.tag == 2){
-            let navCSVC = UINavigationController(rootViewController: csvc)
-            navCSVC.modalPresentationStyle = .fullScreen
-            present(navCSVC, animated: true)
+        }else if(index.row == 1){
+            navigationController?.pushViewController(mvc, animated: true)
+        }else if(index.row == 2){
+            navigationController?.pushViewController(thvc, animated: true)
         }
     }
+  
     
 }
 

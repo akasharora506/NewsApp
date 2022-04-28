@@ -41,7 +41,6 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(onGoBack))
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.identifier)
         tableView.dataSource = self
         tableView.delegate = self
@@ -54,11 +53,7 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
         prevButton.addTarget(self, action: #selector(onPrevClick(sender:)), for: .touchUpInside)
         
     }
-    
-    @objc func onGoBack(){
-        dismiss(animated: true, completion: nil)
-    }
-    
+
     @objc func onNextClick(sender: UIButton!){
         if(currentPage == pages){
             return
