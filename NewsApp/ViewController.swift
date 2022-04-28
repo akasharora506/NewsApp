@@ -33,15 +33,15 @@ class ViewController: UIViewController, UITableViewDelegate {
     func addConstraints(){
         var constraints = [NSLayoutConstraint]()
         
-        constraints.append(header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor))
-        constraints.append(header.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
-        constraints.append(header.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
+        constraints.append(header.topAnchor.constraint(equalTo: view.topAnchor))
+        constraints.append(header.leadingAnchor.constraint(equalTo: view.leadingAnchor))
+        constraints.append(header.trailingAnchor.constraint(equalTo: view.trailingAnchor))
         constraints.append(header.heightAnchor.constraint(equalToConstant: 100))
         
         constraints.append(tableView.topAnchor.constraint(equalTo: header.bottomAnchor))
-        constraints.append(tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor))
-        constraints.append(tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
-        constraints.append(tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
+        constraints.append(tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
+        constraints.append(tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor))
+        constraints.append(tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor))
         
         NSLayoutConstraint.activate(constraints)
     }

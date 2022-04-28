@@ -3,13 +3,14 @@ import SafariServices
 
 class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
-    let tableView = UITableView()
+    
     private var currentPage = 1
     private var viewModels = [NewsTableViewCellViewModel]()
     private var pages = 0
     var selectedSource = ""
     var articles = [Article]()
     var totalArticles = 0
+    
     let header: UILabel = {
         let header = UILabel()
         header.text = "Top Headlines"
@@ -17,25 +18,36 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
         header.backgroundColor = .purple
         header.textAlignment = .center
         header.textColor = .white
+        header.translatesAutoresizingMaskIntoConstraints = false
         return header
         
     }()
+    
+    let tableView: UITableView={
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
+    
     let nextButton :UIButton = {
         let nextButton = UIButton()
         nextButton.setTitle("Next", for: .normal)
         nextButton.setTitleColor(.blue, for: .normal)
+        nextButton.translatesAutoresizingMaskIntoConstraints = false
         return nextButton
     }()
     let prevButton :UIButton={
         let prevButton = UIButton()
         prevButton.setTitle("Prev", for: .normal)
         prevButton.setTitleColor(.blue, for: .normal)
+        prevButton.translatesAutoresizingMaskIntoConstraints = false
         return prevButton
     }()
     
     let bottomPagination: UILabel = {
         let paginatedIndex = UILabel()
         paginatedIndex.text = "0/0"
+        paginatedIndex.translatesAutoresizingMaskIntoConstraints = false
         return paginatedIndex
     }()
     
@@ -51,7 +63,7 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
         updateTableData()
         nextButton.addTarget(self, action: #selector(onNextClick(sender:)), for: .touchUpInside)
         prevButton.addTarget(self, action: #selector(onPrevClick(sender:)), for: .touchUpInside)
-        
+        addConstraints()
     }
 
     @objc func onNextClick(sender: UIButton!){
@@ -68,18 +80,33 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
         currentPage-=1
         updateTableData()
     }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        header.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 100)
-        tableView.frame = CGRect(x: 0, y: 100, width: view.frame.width, height: view.frame.height - 200)
+    func addConstraints(){
+        var constraints = [NSLayoutConstraint]()
+        
+        constraints.append(header.topAnchor.constraint(equalTo: view.topAnchor))
+        constraints.append(header.leadingAnchor.constraint(equalTo: view.leadingAnchor))
+        constraints.append(header.trailingAnchor.constraint(equalTo: view.trailingAnchor))
+        constraints.append(header.heightAnchor.constraint(equalToConstant: 100))
+        
+        constraints.append(tableView.topAnchor.constraint(equalTo: header.bottomAnchor))
+        constraints.append(tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor,constant: -100))
+        constraints.append(tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor))
+        constraints.append(tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor))
+        
         let stackView = UIStackView(arrangedSubviews: [prevButton,bottomPagination,nextButton])
         stackView.axis = .horizontal
         stackView.distribution = .equalSpacing
-        stackView.frame = CGRect(x: 10, y: view.frame.height - 100, width: view.frame.width - 20, height: 100)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(stackView)
         
+        constraints.append(stackView.topAnchor.constraint(equalTo: tableView.bottomAnchor))
+        constraints.append(stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
+        constraints.append(stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 10))
+        constraints.append(stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -10))
+        
+        NSLayoutConstraint.activate(constraints)
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModels.count
     }
