@@ -5,15 +5,6 @@ class CategorySourceViewController: UIViewController {
     
     var viewModels = [SourceTableViewCellViewModel]()
     var searchText = ""
-    let header :UILabel = {
-        let header = UILabel()
-        header.textColor = .white
-        header.backgroundColor = .purple
-        header.font = .systemFont(ofSize: 24, weight: .bold)
-        header.textAlignment = .center
-        header.translatesAutoresizingMaskIntoConstraints = false
-        return header
-    }()
     
     let categoryMenu :DropDown = {
         let menu = DropDown()
@@ -56,7 +47,6 @@ class CategorySourceViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGray6
-        view.addSubview(header)
         tableView.register(SourceTableViewCell.self, forCellReuseIdentifier: SourceTableViewCell.identifier)
         tableView.delegate = self
         tableView.dataSource = self
@@ -91,17 +81,12 @@ class CategorySourceViewController: UIViewController {
     func addConstraints(){
         var constraints = [NSLayoutConstraint]()
         
-        constraints.append(header.topAnchor.constraint(equalTo: view.topAnchor))
-        constraints.append(header.leadingAnchor.constraint(equalTo: view.leadingAnchor))
-        constraints.append(header.trailingAnchor.constraint(equalTo: view.trailingAnchor))
-        constraints.append(header.heightAnchor.constraint(equalToConstant: 100))
-        
-        constraints.append(textBox.topAnchor.constraint(equalTo: header.bottomAnchor))
+        constraints.append(textBox.topAnchor.constraint(equalTo: view.topAnchor,constant: 100))
         constraints.append(textBox.leadingAnchor.constraint(equalTo: view.leadingAnchor))
         constraints.append(textBox.trailingAnchor.constraint(equalTo: view.trailingAnchor))
         constraints.append(textBox.heightAnchor.constraint(equalToConstant: 100))
         
-        categoryMenu.anchorView = header
+        categoryMenu.anchorView = textBox
         
         constraints.append(currView.topAnchor.constraint(equalTo: textBox.topAnchor))
         constraints.append(currView.leadingAnchor.constraint(equalTo: textBox.leadingAnchor))
@@ -127,7 +112,7 @@ class CategorySourceViewController: UIViewController {
         
     }
     func configureHeader(queryText: String){
-        header.text = "Search for \(queryText)"
+        title = "Search for \(queryText)"
     }
     func fetchSources(title: String){
         APIservices.shared.getSources(for: title){
@@ -152,7 +137,7 @@ class CategorySourceViewController: UIViewController {
     }
     func configureSearchText(queryText: String){
         searchText = queryText
-        header.text = "Search for \(queryText)"
+        title = "Search for \(queryText)"
     }
 }
 

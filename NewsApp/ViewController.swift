@@ -7,18 +7,10 @@ class ViewController: UIViewController, UITableViewDelegate {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
-    let header: UILabel = {
-        let header = UILabel()
-        header.backgroundColor = .purple
-        header.text = "Apple News"
-        header.textColor = .white
-        header.textAlignment = .center
-        header.font = .systemFont(ofSize: 24, weight: .bold)
-        header.translatesAutoresizingMaskIntoConstraints = false
-        return header
-    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Apple News"
         tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.identifier)
         tableView.backgroundColor = .systemGray6
         tableView.rowHeight = 120
@@ -26,19 +18,14 @@ class ViewController: UIViewController, UITableViewDelegate {
         view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
-        view.addSubview(header)
         addConstraints()
     }
     
     func addConstraints(){
         var constraints = [NSLayoutConstraint]()
+
         
-        constraints.append(header.topAnchor.constraint(equalTo: view.topAnchor))
-        constraints.append(header.leadingAnchor.constraint(equalTo: view.leadingAnchor))
-        constraints.append(header.trailingAnchor.constraint(equalTo: view.trailingAnchor))
-        constraints.append(header.heightAnchor.constraint(equalToConstant: 100))
-        
-        constraints.append(tableView.topAnchor.constraint(equalTo: header.bottomAnchor))
+        constraints.append(tableView.topAnchor.constraint(equalTo: view.topAnchor))
         constraints.append(tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
         constraints.append(tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor))
         constraints.append(tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor))

@@ -11,18 +11,6 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
     var articles = [Article]()
     var totalArticles = 0
     
-    let header: UILabel = {
-        let header = UILabel()
-        header.text = "Top Headlines"
-        header.font = .systemFont(ofSize: 24, weight: .bold)
-        header.backgroundColor = .purple
-        header.textAlignment = .center
-        header.textColor = .white
-        header.translatesAutoresizingMaskIntoConstraints = false
-        return header
-        
-    }()
-    
     let tableView: UITableView={
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -53,12 +41,12 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Top Headlines"
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.identifier)
         tableView.dataSource = self
         tableView.delegate = self
         view.backgroundColor = .white
 //        tableView.estimatedRowHeight = 150
-        view.addSubview(header)
         view.addSubview(tableView)
         updateTableData()
         nextButton.addTarget(self, action: #selector(onNextClick(sender:)), for: .touchUpInside)
@@ -83,12 +71,7 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
     func addConstraints(){
         var constraints = [NSLayoutConstraint]()
         
-        constraints.append(header.topAnchor.constraint(equalTo: view.topAnchor))
-        constraints.append(header.leadingAnchor.constraint(equalTo: view.leadingAnchor))
-        constraints.append(header.trailingAnchor.constraint(equalTo: view.trailingAnchor))
-        constraints.append(header.heightAnchor.constraint(equalToConstant: 100))
-        
-        constraints.append(tableView.topAnchor.constraint(equalTo: header.bottomAnchor))
+        constraints.append(tableView.topAnchor.constraint(equalTo: view.topAnchor))
         constraints.append(tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor,constant: -100))
         constraints.append(tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor))
         constraints.append(tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor))

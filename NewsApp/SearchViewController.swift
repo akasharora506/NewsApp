@@ -12,15 +12,6 @@ class SearchViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
-    let header :UILabel = {
-       let header = UILabel()
-        header.font = .systemFont(ofSize: 24, weight: .bold)
-        header.backgroundColor = .purple
-        header.textAlignment = .center
-        header.textColor = .white
-        header.translatesAutoresizingMaskIntoConstraints = false
-        return header
-    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +19,6 @@ class SearchViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         view.backgroundColor = .systemGray6
-        view.addSubview(header)
         view.addSubview(tableView)
         fetchData()
         addConstraints()
@@ -36,12 +26,8 @@ class SearchViewController: UIViewController {
     func addConstraints(){
         var constraints = [NSLayoutConstraint]()
         
-        constraints.append(header.topAnchor.constraint(equalTo: view.topAnchor))
-        constraints.append(header.leadingAnchor.constraint(equalTo: view.leadingAnchor))
-        constraints.append(header.trailingAnchor.constraint(equalTo: view.trailingAnchor))
-        constraints.append(header.heightAnchor.constraint(equalToConstant: 100))
         
-        constraints.append(tableView.topAnchor.constraint(equalTo: header.bottomAnchor))
+        constraints.append(tableView.topAnchor.constraint(equalTo: view.topAnchor))
         constraints.append(tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
         constraints.append(tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor))
         constraints.append(tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor))
@@ -51,7 +37,7 @@ class SearchViewController: UIViewController {
 
     func configureHeader(queryText: String, sourceName: String){
         searchText = queryText
-        header.text = "\(sourceName) Results for \(queryText)"
+        title = "\(sourceName) Results for \(queryText)"
     }
 }
 extension SearchViewController : UITableViewDataSource, UITableViewDelegate {

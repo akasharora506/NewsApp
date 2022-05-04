@@ -14,8 +14,8 @@
             filePath = "NewsApp/TopHeadlinesViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
             landmarkName = "onNextClick(sender:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "NewsApp/TopHeadlinesViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "68"
-            endingLineNumber = "68"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
             landmarkName = "TopHeadlinesViewController"
             landmarkType = "3">
          </BreakpointContent>

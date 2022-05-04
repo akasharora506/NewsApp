@@ -69,7 +69,7 @@ class NewsTableViewCell: UITableViewCell {
 
         constraints.append(newsImage.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 1,constant: -10))
         constraints.append(newsImage.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.4,constant: -10))
-        constraints.append(newsImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0))
+        constraints.append(newsImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5))
         constraints.append(newsImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5))
         constraints.append(newsImage.leadingAnchor.constraint(equalTo: newsHeadline.trailingAnchor, constant: 5))
         
