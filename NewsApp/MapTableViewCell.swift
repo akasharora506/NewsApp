@@ -77,7 +77,7 @@ extension MapTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource
                     self?.collectionView.reloadData()
                 }
             case .failure(let error):
-                print("ERRORRRRRR")
+                print(error)
                 
             }
         }

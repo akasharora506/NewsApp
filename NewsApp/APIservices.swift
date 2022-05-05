@@ -36,10 +36,8 @@ final class APIservices {
         
     }
     public func getQueryHeadlines(queryText: String,pageNumber: Int = 1,selectedSource: String = "",completion: @escaping(Result<[Article],Error>)->Void){
-        print(queryText)
         var generatedURL = "https://newsapi.org/v2/everything?q=\(queryText)&pageSize=10&page=\(pageNumber)&apiKey=\(APIservices.API_KEY)"
         if(selectedSource != ""){
-            print("PRINTING")
             generatedURL += "&sources=\(selectedSource)" }
         guard let url = URL(string: generatedURL) else {
             return

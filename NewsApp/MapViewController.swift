@@ -30,12 +30,9 @@ class MapViewController: UIViewController, UITableViewDelegate, CLLocationManage
                     }
             let placeMark = placemarks?[0]
         self.cityName = placeMark?.addressDictionary!["City"] as? String ?? placeMark?.addressDictionary!["Country"] as? String ?? ""
-                let cell = self.tableView.dequeueReusableCell(withIdentifier: MapTableViewCell.identifier, for: IndexPath(row: 0, section: 0)) as! MapTableViewCell
-                cell.cityName = self.cityName
-                    DispatchQueue.main.async {
-                        cell.fetchData()
-                        self.tableView.reloadData()
-                    }
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
             })
         tableView.register(MapTableViewCell.self, forCellReuseIdentifier: MapTableViewCell.identifier)
         tableView.delegate = self
@@ -82,13 +79,11 @@ class MapViewController: UIViewController, UITableViewDelegate, CLLocationManage
                     }
                 let placeMark = placemarks?[0]
             self.cityName = placeMark?.addressDictionary!["City"] as? String ?? placeMark?.addressDictionary!["Country"] as? String ?? ""
-            let cell = self.tableView.dequeueReusableCell(withIdentifier: MapTableViewCell.identifier, for: IndexPath(row: 0, section: 0)) as! MapTableViewCell
-            cell.cityName = self.cityName
-                DispatchQueue.main.async {
-                    cell.fetchData()
-                    self.tableView.reloadData()
-                }
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
             })
+        
         marker.position = coordinate
         marker.map = mapView
     }
@@ -107,7 +102,9 @@ extension MapViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         cell.cityName = self.cityName
-        cell.fetchData()
+        DispatchQueue.main.async {
+            cell.fetchData()
+        }
         return cell
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
