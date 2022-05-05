@@ -22,14 +22,12 @@ class MapCollectionCell: UICollectionViewCell {
 
     let newsImage :UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(systemName: "bell")
         image.translatesAutoresizingMaskIntoConstraints = false
         image.contentMode = .scaleToFill
         return image
     }()
     let newsHeadline :UILabel = {
         let headline = UILabel()
-        headline.text = "Is New York City 'Over'?"
         headline.font = .systemFont(ofSize: 21, weight: .semibold)
         headline.translatesAutoresizingMaskIntoConstraints = false
         headline.numberOfLines = 0
@@ -37,7 +35,6 @@ class MapCollectionCell: UICollectionViewCell {
     }()
     let newsSubline :UILabel = {
         let headline = UILabel()
-        headline.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum nulla lectus, vehicula quis massa ac, pulvinar varius nibh. Nullam varius sollicitudin ligula, eu hendrerit mauris varius eget. Pellentesque sed ligula ante. Nulla auctor, odio ac ultrices scelerisque, sapien mi ornare nisl, eu fringilla augue metus vel neque. Praesent nisi elit, fermentum vitae orci fermentum, rhoncus convallis velit. Nulla bibendum lectus ac turpis congue viverra. Donec cursus ipsum ac maximus faucibus. Mauris sodales mauris eget urna accumsan sollicitudin. Suspendisse nec maximus justo. Proin non accumsan purus. Sed dignissim turpis et lectus lacinia, ut eleifend erat efficitur. Donec pulvinar quam et enim porttitor, vel posuere sem consectetur. Morbi a sapien ut enim suscipit lobortis."
         headline.font = .systemFont(ofSize: 16, weight: .medium)
         headline.textColor = .systemGray
         headline.numberOfLines = 0

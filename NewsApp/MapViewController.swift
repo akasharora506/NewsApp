@@ -13,6 +13,7 @@ class MapViewController: UIViewController, UITableViewDelegate, CLLocationManage
     let manager = CLLocationManager()
     let marker = GMSMarker()
     var cityName = ""
+    private var viewModels = [MapCollectionViewModel]()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGray6
@@ -27,9 +28,14 @@ class MapViewController: UIViewController, UITableViewDelegate, CLLocationManage
                 guard placemarks?.count ?? 0 > 0 else {
                         fatalError()
                     }
-                let pm = placemarks?[0]
-                self.cityName = pm?.locality ?? ""
-                self.tableView.reloadData()
+            let placeMark = placemarks?[0]
+        self.cityName = placeMark?.addressDictionary!["City"] as? String ?? placeMark?.addressDictionary!["Country"] as? String ?? ""
+                let cell = self.tableView.dequeueReusableCell(withIdentifier: MapTableViewCell.identifier, for: IndexPath(row: 0, section: 0)) as! MapTableViewCell
+                cell.cityName = self.cityName
+                    DispatchQueue.main.async {
+                        cell.fetchData()
+                        self.tableView.reloadData()
+                    }
             })
         tableView.register(MapTableViewCell.self, forCellReuseIdentifier: MapTableViewCell.identifier)
         tableView.delegate = self
@@ -75,8 +81,13 @@ class MapViewController: UIViewController, UITableViewDelegate, CLLocationManage
                         fatalError()
                     }
                 let placeMark = placemarks?[0]
-            self.cityName = placeMark?.addressDictionary!["City"] as? String ?? placeMark?.addressDictionary!["Country"] as! String
-                self.tableView.reloadData()
+            self.cityName = placeMark?.addressDictionary!["City"] as? String ?? placeMark?.addressDictionary!["Country"] as? String ?? ""
+            let cell = self.tableView.dequeueReusableCell(withIdentifier: MapTableViewCell.identifier, for: IndexPath(row: 0, section: 0)) as! MapTableViewCell
+            cell.cityName = self.cityName
+                DispatchQueue.main.async {
+                    cell.fetchData()
+                    self.tableView.reloadData()
+                }
             })
         marker.position = coordinate
         marker.map = mapView
@@ -95,13 +106,15 @@ extension MapViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MapTableViewCell.identifier, for: indexPath) as? MapTableViewCell else {
             return UITableViewCell()
         }
+        cell.cityName = self.cityName
+        cell.fetchData()
         return cell
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.width, height: 50))
 
         let label = UILabel()
-        label.text = "Results for \(self.cityName)"
+        label.text = self.cityName != "" ? "Results for \(self.cityName)" : "No Results"
         label.frame = CGRect.init(x: 5, y: 5, width: headerView.frame.width-10, height: headerView.frame.height-10)
         label.textAlignment = .center
         label.textColor = .black

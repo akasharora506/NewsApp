@@ -3,8 +3,8 @@ import UIKit
 class MapTableViewCell: UITableViewCell {
     
     static let identifier = "mapCell"
-    var viewModels = [MapCollectionCell]()
-
+    var viewModels = [MapCollectionViewModel]()
+    var cityName = ""
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -51,13 +51,35 @@ class MapTableViewCell: UITableViewCell {
 extension MapTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MapCollectionCell.identifier, for: indexPath) as! MapCollectionCell
+//        print(viewModels)
+        cell.configureTile(with: viewModels[indexPath.row])
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return viewModels.count
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: contentView.frame.width, height: contentView.frame.height)
     }
-    
+    func fetchData(){
+        APIservices.shared.getQueryHeadlines(queryText: cityName){ [weak self] result in
+            switch result {
+            case .success(let articles):
+                print(articles)
+                self?.viewModels = articles.compactMap({
+                    MapCollectionViewModel(
+                        title: $0.title,
+                        subTitle: $0.description ?? "No Description",
+                        imageURL: URL(string: $0.urlToImage ?? "")
+                    )
+                })
+                DispatchQueue.main.async {
+                    self?.collectionView.reloadData()
+                }
+            case .failure(let error):
+                print("ERRORRRRRR")
+                
+            }
+        }
+    }
 }
