@@ -62,7 +62,8 @@ extension MapTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource
         return CGSize(width: contentView.frame.width, height: contentView.frame.height)
     }
     func fetchData(){
-        APIservices.shared.getQueryHeadlines(queryText: cityName){ [weak self] result in
+        let formattedCityName = cityName.trimmingCharacters(in: NSCharacterSet.whitespaces).replacingOccurrences(of: " ", with: "-")
+        APIservices.shared.getQueryHeadlines(queryText: formattedCityName){ [weak self] result in
             switch result {
             case .success(let articles):
                 print(articles)

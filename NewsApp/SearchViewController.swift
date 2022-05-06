@@ -62,7 +62,8 @@ extension SearchViewController : UITableViewDataSource, UITableViewDelegate {
         present(vc, animated: true)
     }
     func fetchData(){
-        APIservices.shared.getQueryHeadlines(queryText: searchText,pageNumber: currentPage, selectedSource: selectedSource){ [weak self] result in
+        let formattedSearchText = searchText.trimmingCharacters(in: NSCharacterSet.whitespaces).replacingOccurrences(of: " ", with: "-")
+        APIservices.shared.getQueryHeadlines(queryText: formattedSearchText,pageNumber: currentPage, selectedSource: selectedSource){ [weak self] result in
             switch result {
             case .success(let articles):
                 self?.articles.append(contentsOf: articles)
