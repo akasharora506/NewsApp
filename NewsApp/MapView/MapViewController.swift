@@ -31,7 +31,7 @@ class MapViewController: UIViewController, UITableViewDelegate, CLLocationManage
                         fatalError()
                     }
             let placeMark = placemarks?[0]
-        self.cityName = placeMark?.addressDictionary!["City"] as? String ?? placeMark?.addressDictionary!["Country"] as? String ?? ""
+            self.cityName = placeMark?.locality as? String ?? placeMark?.country as? String ?? ""
             DispatchQueue.main.async {
                 self.tableView.reloadData()
                 loadingView.removeFromSuperview()
@@ -94,7 +94,7 @@ class MapViewController: UIViewController, UITableViewDelegate, CLLocationManage
                         fatalError()
                     }
                 let placeMark = placemarks?[0]
-            self.cityName = placeMark?.addressDictionary!["City"] as? String ?? placeMark?.addressDictionary!["Country"] as? String ?? ""
+            self.cityName = placeMark?.locality as? String ?? placeMark?.country as? String ?? ""
             DispatchQueue.main.async {
                 self.tableView.reloadData()
                 loadingView.removeFromSuperview()

@@ -12,7 +12,7 @@ class MapTableViewCell: UITableViewCell {
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-//        layout.sectionInset = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
+        layout.sectionInset = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(MapCollectionCell.self, forCellWithReuseIdentifier: MapCollectionCell.identifier)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -68,6 +68,11 @@ extension MapTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource
     func fetchData(){
         let formattedCityName = cityName.trimmingCharacters(in: NSCharacterSet.whitespaces).replacingOccurrences(of: " ", with: "-")
         if(formattedCityName == ""){
+            self.viewModels.removeAll()
+            self.articles.removeAll()
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
             return
         }
         APIservices.shared.getQueryHeadlines(queryText: formattedCityName){ [weak self] result in
