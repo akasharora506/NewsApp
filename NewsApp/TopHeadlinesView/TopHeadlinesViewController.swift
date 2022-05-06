@@ -38,7 +38,6 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
         paginatedIndex.translatesAutoresizingMaskIntoConstraints = false
         return paginatedIndex
     }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Top Headlines"
@@ -46,7 +45,6 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
         tableView.dataSource = self
         tableView.delegate = self
         view.backgroundColor = .white
-//        tableView.estimatedRowHeight = 150
         view.addSubview(tableView)
         updateTableData()
         nextButton.addTarget(self, action: #selector(onNextClick(sender:)), for: .touchUpInside)
@@ -111,7 +109,18 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
         let vc = SFSafariViewController(url: url)
         present(vc, animated: true)
     }
+    func createSpinner()->UIView{
+        let layerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
+        let spinner = UIActivityIndicatorView()
+        spinner.center = layerView.center
+        spinner.style = .large
+        layerView.addSubview(spinner)
+        spinner.startAnimating()
+        return layerView
+    }
     func updateTableData(){
+        let loadingView = createSpinner()
+        view.addSubview(loadingView)
         APIservices.shared.getTopHeadlines(pageNumber: currentPage, sources: selectedSource ){
             [weak self] result, countArticles in
             self?.totalArticles = countArticles
@@ -131,11 +140,11 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
                     if((self?.totalArticles ?? 0) % 10 != 0) {totalPages+=1}
                     self?.pages = totalPages
                     self?.bottomPagination.text = "\(self?.currentPage ?? 0)/\(self?.pages ?? 0)"
+                    loadingView.removeFromSuperview()
                 }
             case .failure(let error):
                 print(error)
             }
-           
         }
     }
 }

@@ -61,7 +61,20 @@ extension SearchViewController : UITableViewDataSource, UITableViewDelegate {
         let vc = SFSafariViewController(url: url)
         present(vc, animated: true)
     }
+    func createSpinner()->UIView{
+        let layerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
+        let spinner = UIActivityIndicatorView()
+        spinner.center = layerView.center
+        spinner.style = .large
+        layerView.addSubview(spinner)
+        spinner.startAnimating()
+        return layerView
+    }
     func fetchData(){
+        let loadingView = createSpinner()
+        if(articles.isEmpty){
+            view.addSubview(loadingView)
+        };
         let formattedSearchText = searchText.trimmingCharacters(in: NSCharacterSet.whitespaces).replacingOccurrences(of: " ", with: "-")
         APIservices.shared.getQueryHeadlines(queryText: formattedSearchText,pageNumber: currentPage, selectedSource: selectedSource){ [weak self] result in
             switch result {
@@ -77,6 +90,7 @@ extension SearchViewController : UITableViewDataSource, UITableViewDelegate {
                 DispatchQueue.main.async {
                     self?.tableView.tableFooterView = nil
                     self?.tableView.reloadData()
+                    loadingView.removeFromSuperview()
                 }
             case .failure(let error):
                 print(error)

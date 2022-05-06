@@ -1,10 +1,3 @@
-//
-//  AppDelegate.swift
-//  NewsApp
-//
-//  Created by Akash Arora on 11/04/22.
-//
-
 import UIKit
 import GoogleMaps
 @main

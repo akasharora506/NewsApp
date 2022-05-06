@@ -16,6 +16,8 @@ class MapViewController: UIViewController, UITableViewDelegate, CLLocationManage
     private var viewModels = [MapCollectionViewModel]()
     override func viewDidLoad() {
         super.viewDidLoad()
+        let loadingView = createSpinner()
+        view.addSubview(loadingView)
         view.backgroundColor = .systemGray6
         title = "News by Location"
         manager.delegate = self
@@ -32,8 +34,10 @@ class MapViewController: UIViewController, UITableViewDelegate, CLLocationManage
         self.cityName = placeMark?.addressDictionary!["City"] as? String ?? placeMark?.addressDictionary!["Country"] as? String ?? ""
             DispatchQueue.main.async {
                 self.tableView.reloadData()
+                loadingView.removeFromSuperview()
             }
             })
+ 
         tableView.register(MapTableViewCell.self, forCellReuseIdentifier: MapTableViewCell.identifier)
         tableView.delegate = self
         tableView.dataSource = self
@@ -69,7 +73,19 @@ class MapViewController: UIViewController, UITableViewDelegate, CLLocationManage
         marker.map = mapView
         manager.stopUpdatingLocation()
     }
+    func createSpinner()->UIView{
+        let layerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
+        let spinner = UIActivityIndicatorView()
+        spinner.center = layerView.center
+        spinner.style = .large
+        layerView.addSubview(spinner)
+        spinner.startAnimating()
+        return layerView
+    }
+    
     func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
+        let loadingView = createSpinner()
+        view.addSubview(loadingView)
         CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude), completionHandler: {(placemarks, error) -> Void in
                 guard error == nil else {
                     fatalError()
@@ -81,9 +97,9 @@ class MapViewController: UIViewController, UITableViewDelegate, CLLocationManage
             self.cityName = placeMark?.addressDictionary!["City"] as? String ?? placeMark?.addressDictionary!["Country"] as? String ?? ""
             DispatchQueue.main.async {
                 self.tableView.reloadData()
+                loadingView.removeFromSuperview()
             }
             })
-        
         marker.position = coordinate
         marker.map = mapView
     }

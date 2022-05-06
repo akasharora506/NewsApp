@@ -114,7 +114,18 @@ class CategorySourceViewController: UIViewController {
     func configureHeader(queryText: String){
         title = "Search for \(queryText)"
     }
+    func createSpinner()->UIView{
+        let layerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
+        let spinner = UIActivityIndicatorView()
+        spinner.center = layerView.center
+        spinner.style = .large
+        layerView.addSubview(spinner)
+        spinner.startAnimating()
+        return layerView
+    }
     func fetchSources(title: String){
+        let loadingView = createSpinner()
+        view.addSubview(loadingView)
         APIservices.shared.getSources(for: title){
             [weak self] result in
             switch result {
@@ -128,6 +139,7 @@ class CategorySourceViewController: UIViewController {
                 })
                 DispatchQueue.main.async {
                     self?.tableView.reloadData()
+                    loadingView.removeFromSuperview()
                 }
             case .failure(let error):
                 print(error)
