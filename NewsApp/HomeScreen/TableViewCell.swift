@@ -76,7 +76,7 @@ class TableViewCell: UITableViewCell {
         constraints.append(button.centerXAnchor.constraint(equalTo: contentView.centerXAnchor))
         constraints.append(button.topAnchor.constraint(equalTo: searchBar.bottomAnchor))
         constraints.append(button.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.33))
-        constraints.append(button.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.4))
+        constraints.append(button.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5))
         
         NSLayoutConstraint.activate(constraints)
     }
