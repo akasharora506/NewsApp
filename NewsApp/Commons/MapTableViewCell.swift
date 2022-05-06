@@ -1,14 +1,18 @@
 import UIKit
+import SafariServices
 
 class MapTableViewCell: UITableViewCell {
     
     static let identifier = "mapCell"
+    var parent: UIViewController?
+    
     var viewModels = [MapCollectionViewModel]()
+    var articles = [Article]()
     var cityName = ""
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.sectionInset = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
+//        layout.sectionInset = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(MapCollectionCell.self, forCellWithReuseIdentifier: MapCollectionCell.identifier)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -27,7 +31,7 @@ class MapTableViewCell: UITableViewCell {
         var constraints = [NSLayoutConstraint]()
         
         constraints.append(collectionView.topAnchor.constraint(equalTo: contentView.topAnchor))
-        constraints.append(collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor))
+        constraints.append(collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,constant: -25))
         constraints.append(collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor))
         constraints.append(collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor))
         
@@ -63,10 +67,14 @@ extension MapTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource
     }
     func fetchData(){
         let formattedCityName = cityName.trimmingCharacters(in: NSCharacterSet.whitespaces).replacingOccurrences(of: " ", with: "-")
+        if(formattedCityName == ""){
+            return
+        }
         APIservices.shared.getQueryHeadlines(queryText: formattedCityName){ [weak self] result in
             switch result {
             case .success(let articles):
                 print(articles)
+                self?.articles = articles
                 self?.viewModels = articles.compactMap({
                     MapCollectionViewModel(
                         title: $0.title,
@@ -82,5 +90,12 @@ extension MapTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource
                 
             }
         }
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let url = URL(string: articles[indexPath.row].url ?? "" ) else {
+            return
+        }
+        let vc = SFSafariViewController(url: url)
+        parent?.navigationController?.pushViewController(vc, animated: true)
     }
 }

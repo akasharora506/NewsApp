@@ -43,6 +43,7 @@
 		1DC307BA281151C000826D2A /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		1DC307BC2811547000826D2A /* NewsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
 		1DC3EC042812A709004C0564 /* CategorySourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySourceViewController.swift; sourceTree = "<group>"; };
+		1DF619AE2824F9220042DF37 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		5879236B0A4481B74E620A7C /* Pods_NewsApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NewsApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BCA14D8E3733471F5CCDA3E /* Pods-NewsApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsApp.release.xcconfig"; path = "Target Support Files/Pods-NewsApp/Pods-NewsApp.release.xcconfig"; sourceTree = "<group>"; };
 		C33940BC033015387021D01D /* Pods-NewsApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsApp.debug.xcconfig"; path = "Target Support Files/Pods-NewsApp/Pods-NewsApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -81,24 +82,97 @@
 		1D010335280425B500B8CFC3 /* NewsApp */ = {
 			isa = PBXGroup;
 			children = (
-				1D010336280425B500B8CFC3 /* AppDelegate.swift */,
-				1D010338280425B500B8CFC3 /* SceneDelegate.swift */,
-				1DC307B828114B8E00826D2A /* APIservices.swift */,
-				1D01033A280425B500B8CFC3 /* ViewController.swift */,
-				1DC307BA281151C000826D2A /* SearchViewController.swift */,
-				1D3128F6280C256300498FB9 /* MapViewController.swift */,
-				1DC3EC042812A709004C0564 /* CategorySourceViewController.swift */,
-				1D3128F8280FD32000498FB9 /* TopHeadlinesViewController.swift */,
-				1D01034A2807534300B8CFC3 /* TableViewCell.swift */,
-				1D49CB16280FE08F003211D7 /* MapTableViewCell.swift */,
-				1DC307BC2811547000826D2A /* NewsTableViewCell.swift */,
-				1D2136F42812CC4C007BF53E /* SourceTableViewCell.swift */,
-				1D610A0C281BE12500939A7A /* MapCollectionCell.swift */,
+				1DF619AF282508950042DF37 /* Config */,
+				1DF619B1282509850042DF37 /* Main */,
+				1DF619B528250A050042DF37 /* Services */,
+				1DF619B3282509C30042DF37 /* CategorySourceView */,
+				1DF619B2282509A40042DF37 /* MapView */,
+				1DF619B928250A870042DF37 /* TopHeadlinesView */,
+				1DF619B628250A300042DF37 /* SearchView */,
+				1DF619B828250A5F0042DF37 /* Commons */,
+				1DF619B4282509EF0042DF37 /* HomeScreen */,
 				1D010341280425B500B8CFC3 /* LaunchScreen.storyboard */,
 				1D01033F280425B500B8CFC3 /* Assets.xcassets */,
 				1D010344280425B500B8CFC3 /* Info.plist */,
 			);
 			path = NewsApp;
+			sourceTree = "<group>";
+		};
+		1DF619AF282508950042DF37 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				1DF619AE2824F9220042DF37 /* Config.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		1DF619B1282509850042DF37 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				1D010336280425B500B8CFC3 /* AppDelegate.swift */,
+				1D010338280425B500B8CFC3 /* SceneDelegate.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		1DF619B2282509A40042DF37 /* MapView */ = {
+			isa = PBXGroup;
+			children = (
+				1D3128F6280C256300498FB9 /* MapViewController.swift */,
+			);
+			path = MapView;
+			sourceTree = "<group>";
+		};
+		1DF619B3282509C30042DF37 /* CategorySourceView */ = {
+			isa = PBXGroup;
+			children = (
+				1DC3EC042812A709004C0564 /* CategorySourceViewController.swift */,
+			);
+			path = CategorySourceView;
+			sourceTree = "<group>";
+		};
+		1DF619B4282509EF0042DF37 /* HomeScreen */ = {
+			isa = PBXGroup;
+			children = (
+				1D01033A280425B500B8CFC3 /* ViewController.swift */,
+				1D01034A2807534300B8CFC3 /* TableViewCell.swift */,
+			);
+			path = HomeScreen;
+			sourceTree = "<group>";
+		};
+		1DF619B528250A050042DF37 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				1DC307B828114B8E00826D2A /* APIservices.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		1DF619B628250A300042DF37 /* SearchView */ = {
+			isa = PBXGroup;
+			children = (
+				1DC307BA281151C000826D2A /* SearchViewController.swift */,
+			);
+			path = SearchView;
+			sourceTree = "<group>";
+		};
+		1DF619B828250A5F0042DF37 /* Commons */ = {
+			isa = PBXGroup;
+			children = (
+				1D2136F42812CC4C007BF53E /* SourceTableViewCell.swift */,
+				1D610A0C281BE12500939A7A /* MapCollectionCell.swift */,
+				1D49CB16280FE08F003211D7 /* MapTableViewCell.swift */,
+				1DC307BC2811547000826D2A /* NewsTableViewCell.swift */,
+			);
+			path = Commons;
+			sourceTree = "<group>";
+		};
+		1DF619B928250A870042DF37 /* TopHeadlinesView */ = {
+			isa = PBXGroup;
+			children = (
+				1D3128F8280FD32000498FB9 /* TopHeadlinesViewController.swift */,
+			);
+			path = TopHeadlinesView;
 			sourceTree = "<group>";
 		};
 		2111F0BE4EF4288E8D34F6F0 /* Frameworks */ = {
@@ -282,6 +356,7 @@
 /* Begin XCBuildConfiguration section */
 		1D010345280425B500B8CFC3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1DF619AE2824F9220042DF37 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -342,6 +417,7 @@
 		};
 		1D010346280425B500B8CFC3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1DF619AE2824F9220042DF37 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

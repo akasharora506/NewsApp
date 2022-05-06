@@ -24,6 +24,9 @@ class MapCollectionCell: UICollectionViewCell {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
         image.contentMode = .scaleToFill
+        image.clipsToBounds = true
+        image.layer.cornerRadius = 6
+        image.layer.masksToBounds = true
         return image
     }()
     let newsHeadline :UILabel = {
@@ -76,17 +79,16 @@ class MapCollectionCell: UICollectionViewCell {
         constraints.append(newsSubline.topAnchor.constraint(equalTo: newsHeadline.bottomAnchor, constant: 5))
         constraints.append(newsSubline.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10))
         constraints.append(newsSubline.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.6,constant: -10))
-        constraints.append(newsSubline.heightAnchor.constraint(equalTo: contentView.heightAnchor,constant: -50))
+        constraints.append(newsSubline.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,constant: -5))
 
-        constraints.append(newsImage.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 1,constant: -10))
+        constraints.append(newsImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,constant: -5))
         constraints.append(newsImage.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.4,constant: -10))
         constraints.append(newsImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5))
         constraints.append(newsImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5))
         constraints.append(newsImage.leadingAnchor.constraint(equalTo: newsHeadline.trailingAnchor, constant: 5))
         NSLayoutConstraint.activate(constraints)
     }
-
-    
+        
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

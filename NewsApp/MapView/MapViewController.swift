@@ -102,6 +102,7 @@ extension MapViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         cell.cityName = self.cityName
+        cell.parent = self
         DispatchQueue.main.async {
             cell.fetchData()
         }
