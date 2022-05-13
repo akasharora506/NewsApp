@@ -5,8 +5,9 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
 
     
     private var currentPage = 1
-    private var viewModels = [NewsTableViewCellViewModel]()
+    private var topHeadlineViewModels = [NewsTableViewCellViewModel]()
     private var pages = 0
+    private var viewModel = TopHeadlineViewModel()
     var selectedSource = ""
     var articles = [Article]()
     var totalArticles = 0
@@ -46,7 +47,30 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
         tableView.delegate = self
         view.backgroundColor = .white
         view.addSubview(tableView)
-        updateTableData()
+        viewModel.articles.bind { [weak self] articles in
+            self?.articles = articles
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+                var totalPages = (self?.totalArticles ?? 0) / 10
+                if((self?.totalArticles ?? 0) % 10 != 0) {totalPages+=1}
+                self?.pages = totalPages
+                self?.bottomPagination.text = "\(self?.currentPage ?? 0)/\(self?.pages ?? 0)"
+            }
+          }
+        viewModel.topHeadlineViewModels.bind { [weak self] topHeadlineViewModels in
+            self?.topHeadlineViewModels = topHeadlineViewModels
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+                var totalPages = (self?.totalArticles ?? 0) / 10
+                if((self?.totalArticles ?? 0) % 10 != 0) {totalPages+=1}
+                self?.pages = totalPages
+                self?.bottomPagination.text = "\(self?.currentPage ?? 0)/\(self?.pages ?? 0)"
+            }
+          }
+        viewModel.totalArticles.bind { [weak self] totalArticles in
+            self?.totalArticles = totalArticles
+          }
+        viewModel.fetchData(currentPage: currentPage, selectedSource: selectedSource)
         nextButton.addTarget(self, action: #selector(onNextClick(sender:)), for: .touchUpInside)
         prevButton.addTarget(self, action: #selector(onPrevClick(sender:)), for: .touchUpInside)
         addConstraints()
@@ -57,14 +81,14 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
             return
         }
         currentPage+=1
-        updateTableData()
+        self.viewModel.fetchData(currentPage: currentPage, selectedSource: selectedSource)
     }
     @objc func onPrevClick(sender: UIButton!){
         if(currentPage == 1){
             return
         }
         currentPage-=1
-        updateTableData()
+        self.viewModel.fetchData(currentPage: currentPage, selectedSource: selectedSource)
     }
     func addConstraints(){
         var constraints = [NSLayoutConstraint]()
@@ -89,14 +113,14 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModels.count
+        return topHeadlineViewModels.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier) as? NewsTableViewCell else {
             fatalError()
         }
-        cell.configure(with: viewModels[indexPath.row])
+        cell.configure(with: topHeadlineViewModels[indexPath.row])
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -118,33 +142,5 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
         spinner.startAnimating()
         return layerView
     }
-    func updateTableData(){
-        let loadingView = createSpinner()
-        view.addSubview(loadingView)
-        APIservices.shared.getTopHeadlines(pageNumber: currentPage, sources: selectedSource ){
-            [weak self] result, countArticles in
-            self?.totalArticles = countArticles
-            switch result {
-            case .success(let articles):
-                self?.articles = articles
-                self?.viewModels = articles.compactMap({
-                    NewsTableViewCellViewModel(
-                        title: $0.title,
-                        subTitle: $0.description ?? "No Description",
-                        imageURL: URL(string: $0.urlToImage ?? "")
-                    )
-                })
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                    var totalPages = (self?.totalArticles ?? 0) / 10
-                    if((self?.totalArticles ?? 0) % 10 != 0) {totalPages+=1}
-                    self?.pages = totalPages
-                    self?.bottomPagination.text = "\(self?.currentPage ?? 0)/\(self?.pages ?? 0)"
-                    loadingView.removeFromSuperview()
-                }
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
+    
 }

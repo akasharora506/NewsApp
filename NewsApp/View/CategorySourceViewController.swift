@@ -3,9 +3,9 @@ import DropDown
 
 class CategorySourceViewController: UIViewController {
     
-    var viewModels = [SourceTableViewCellViewModel]()
+    var sourceViewModels = [SourceTableViewCellViewModel]()
     var searchText = ""
-    
+    var viewModel = CategorySourceViewModel()
     let categoryMenu :DropDown = {
         let menu = DropDown()
         menu.dataSource = [
@@ -54,7 +54,12 @@ class CategorySourceViewController: UIViewController {
         view.addSubview(textBox)
         view.addSubview(categoryMenu)
         textBox.addSubview(currView)
-        fetchSources(title: currView.text ?? "")
+        viewModel.sources.bind { [weak self] sources in
+            self?.sourceViewModels = sources
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+          }
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didOpenMenu))
         gesture.numberOfTapsRequired = 1
         gesture.numberOfTouchesRequired = 1
@@ -108,45 +113,12 @@ class CategorySourceViewController: UIViewController {
     
     func onSelectCategory(index: Int, title: String){
         currView.text = title
-        fetchSources(title: title)
-        
+        self.viewModel.fetchSources(title: title)
     }
     func configureHeader(queryText: String){
         title = "Search for \(queryText)"
     }
-    func createSpinner()->UIView{
-        let layerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
-        let spinner = UIActivityIndicatorView()
-        spinner.center = layerView.center
-        spinner.style = .large
-        layerView.addSubview(spinner)
-        spinner.startAnimating()
-        return layerView
-    }
-    func fetchSources(title: String){
-        let loadingView = createSpinner()
-        view.addSubview(loadingView)
-        APIservices.shared.getSources(for: title){
-            [weak self] result in
-            switch result {
-            case .success(let sources):
-                self?.viewModels = sources.compactMap({
-                    SourceTableViewCellViewModel(
-                        id: $0.id,
-                        title: $0.name,
-                        description:  $0.description ?? "No Description"
-                    )
-                })
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                    loadingView.removeFromSuperview()
-                }
-            case .failure(let error):
-                print(error)
-            }
-           
-        }
-    }
+    
     func configureSearchText(queryText: String){
         searchText = queryText
         title = "Search for \(queryText)"
@@ -156,14 +128,14 @@ class CategorySourceViewController: UIViewController {
 
 extension CategorySourceViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModels.count
+        return sourceViewModels.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SourceTableViewCell.identifier) as? SourceTableViewCell else {
             fatalError()
         }
-        cell.configure(with: viewModels[indexPath.row])
+        cell.configure(with: sourceViewModels[indexPath.row])
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -171,8 +143,8 @@ extension CategorySourceViewController: UITableViewDelegate, UITableViewDataSour
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let svc = SearchViewController()
-        svc.configureHeader(queryText: searchText,sourceName: viewModels[indexPath.row].title)
-        svc.selectedSource = viewModels[indexPath.row].id
+        svc.configureHeader(queryText: searchText,sourceName: sourceViewModels[indexPath.row].title)
+        svc.selectedSource = sourceViewModels[indexPath.row].id
         navigationController?.pushViewController(svc, animated: true)
         
     }

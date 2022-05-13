@@ -4,40 +4,31 @@ import CoreLocation
 
 class MapViewController: UIViewController, UITableViewDelegate, CLLocationManagerDelegate, GMSMapViewDelegate {
     
+    let viewModel = MapViewModel()
+    let manager = CLLocationManager()
+    let marker = GMSMarker()
+    var cityName = ""
 
     let tableView :UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
-    let manager = CLLocationManager()
-    let marker = GMSMarker()
-    var cityName = ""
-    private var viewModels = [MapCollectionViewModel]()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        let loadingView = createSpinner()
-        view.addSubview(loadingView)
         view.backgroundColor = .systemGray6
         title = "News by Location"
         manager.delegate = self
         manager.requestWhenInUseAuthorization()
         manager.startUpdatingLocation()
-        CLGeocoder().reverseGeocodeLocation(manager.location ?? CLLocation(latitude: 0, longitude: 0), completionHandler: {(placemarks, error) -> Void in
-                guard error == nil else {
-                    fatalError()
-                }
-                guard placemarks?.count ?? 0 > 0 else {
-                        fatalError()
-                    }
-            let placeMark = placemarks?[0]
-            self.cityName = placeMark?.locality as? String ?? placeMark?.country as? String ?? ""
+        viewModel.cityName.bind { [weak self] cityName in
+            self?.cityName = cityName
             DispatchQueue.main.async {
-                self.tableView.reloadData()
-                loadingView.removeFromSuperview()
+                self?.tableView.reloadData()
             }
-            })
- 
+          }
+        viewModel.updateCity(currLocation: manager.location ?? CLLocation(latitude: 0, longitude: 0))
         tableView.register(MapTableViewCell.self, forCellReuseIdentifier: MapTableViewCell.identifier)
         tableView.delegate = self
         tableView.dataSource = self
@@ -73,33 +64,9 @@ class MapViewController: UIViewController, UITableViewDelegate, CLLocationManage
         marker.map = mapView
         manager.stopUpdatingLocation()
     }
-    func createSpinner()->UIView{
-        let layerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
-        let spinner = UIActivityIndicatorView()
-        spinner.center = layerView.center
-        spinner.style = .large
-        layerView.addSubview(spinner)
-        spinner.startAnimating()
-        return layerView
-    }
     
     func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
-        let loadingView = createSpinner()
-        view.addSubview(loadingView)
-        CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude), completionHandler: {(placemarks, error) -> Void in
-                guard error == nil else {
-                    fatalError()
-                }
-                guard placemarks?.count ?? 0 > 0 else {
-                        fatalError()
-                    }
-                let placeMark = placemarks?[0]
-            self.cityName = placeMark?.locality as? String ?? placeMark?.country as? String ?? ""
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-                loadingView.removeFromSuperview()
-            }
-            })
+        viewModel.updateCity(currLocation: CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude))
         marker.position = coordinate
         marker.map = mapView
     }
@@ -120,7 +87,7 @@ extension MapViewController: UITableViewDataSource {
         cell.cityName = self.cityName
         cell.parent = self
         DispatchQueue.main.async {
-            cell.fetchData()
+            cell.viewModel.fetchData(cityName: self.cityName)
         }
         return cell
     }

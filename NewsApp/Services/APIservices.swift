@@ -3,8 +3,8 @@ import Foundation
 final class APIservices {
     
     static let shared = APIservices()
-    static internal let ALT_API_KEY = Bundle.main.infoDictionary?["API_KEY"] as! String
-    static internal let API_KEY = Bundle.main.infoDictionary?["ALT_API_KEY"] as! String
+    static internal let API_KEY = Bundle.main.infoDictionary?["API_KEY"] as! String
+    static internal let ALT_API_KEY = Bundle.main.infoDictionary?["ALT_API_KEY"] as! String
     struct Constants {
         static let topHeadlinesURL = "https://newsapi.org/v2/top-headlines?country=in&apiKey=\(APIservices.ALT_API_KEY)&pageSize=10"
         static let topHeadlinesURLwithSource = "https://newsapi.org/v2/top-headlines?apiKey=\(APIservices.ALT_API_KEY)&pageSize=10"
@@ -78,34 +78,3 @@ final class APIservices {
     }
 }
 
-//Models
-
-struct APIrespones: Codable {
-    let totalResults: Int
-    let articles: Array<Article>
-}
-
-struct Article: Codable{
-    let source: Source
-    let title: String
-    let description: String?
-    let url: String?
-    let urlToImage: String?
-    let publishedAt: String?
-}
-
-struct Source: Codable{
-    let name: String
-}
-
-//Model for Sources
-
-struct SourceAPIResponse: Codable {
-    let sources: Array<SourceDetail>
-}
-
-struct SourceDetail: Codable {
-    let id: String
-    let name: String
-    let description: String?
-}

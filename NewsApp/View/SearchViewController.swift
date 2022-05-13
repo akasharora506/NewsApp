@@ -2,11 +2,14 @@ import UIKit
 import SafariServices
 
 class SearchViewController: UIViewController {
-    private var searchText = ""
+    var searchText = ""
     var selectedSource = ""
-    private var currentPage = 1
-    private var viewModels = [NewsTableViewCellViewModel]()
+    var currentPage = 1
+    
+    private var searchViewModels = [NewsTableViewCellViewModel]()
     private var articles = [Article]()
+    private var viewModel = SearchViewModel()
+    
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -20,7 +23,21 @@ class SearchViewController: UIViewController {
         tableView.dataSource = self
         view.backgroundColor = .systemGray6
         view.addSubview(tableView)
-        fetchData()
+        viewModel.articles.bind { [weak self] articles in
+            self?.articles = articles
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+                self?.tableView.tableFooterView = nil
+            }
+          }
+        viewModel.searchViewModels.bind { [weak self] searchViewModels in
+            self?.searchViewModels = searchViewModels
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+                self?.tableView.tableFooterView = nil
+            }
+          }
+        viewModel.fetchData(searchText: searchText, currentPage: currentPage, selectedSource: selectedSource)
         addConstraints()
     }
     func addConstraints(){
@@ -42,13 +59,13 @@ class SearchViewController: UIViewController {
 }
 extension SearchViewController : UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModels.count
+        return searchViewModels.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier) as? NewsTableViewCell else {
             fatalError()
         }
-        cell.configure(with: viewModels[indexPath.row])
+        cell.configure(with: searchViewModels[indexPath.row])
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -70,34 +87,7 @@ extension SearchViewController : UITableViewDataSource, UITableViewDelegate {
         spinner.startAnimating()
         return layerView
     }
-    func fetchData(){
-        let loadingView = createSpinner()
-        if(articles.isEmpty){
-            view.addSubview(loadingView)
-        };
-        let formattedSearchText = searchText.trimmingCharacters(in: NSCharacterSet.whitespaces).replacingOccurrences(of: " ", with: "-")
-        APIservices.shared.getQueryHeadlines(queryText: formattedSearchText,pageNumber: currentPage, selectedSource: selectedSource){ [weak self] result in
-            switch result {
-            case .success(let articles):
-                self?.articles.append(contentsOf: articles)
-                self?.viewModels.append(contentsOf: articles.compactMap({
-                    NewsTableViewCellViewModel(
-                        title: $0.title,
-                        subTitle: $0.description ?? "No Description",
-                        imageURL: URL(string: $0.urlToImage ?? "")
-                    )
-                }))
-                DispatchQueue.main.async {
-                    self?.tableView.tableFooterView = nil
-                    self?.tableView.reloadData()
-                    loadingView.removeFromSuperview()
-                }
-            case .failure(let error):
-                print(error)
-                
-            }
-        }
-    }
+    
 }
 
 extension SearchViewController: UIScrollViewDelegate{
@@ -105,7 +95,7 @@ extension SearchViewController: UIScrollViewDelegate{
         if(scrollView.contentOffset.y > tableView.contentSize.height - 100 - scrollView.frame.height){
             currentPage+=1
             self.tableView.tableFooterView = createSpinnerFooter()
-            fetchData()
+            self.viewModel.fetchData(searchText: self.searchText, currentPage: self.currentPage, selectedSource: self.selectedSource)
         }
     }
     private func createSpinnerFooter()->UIView{

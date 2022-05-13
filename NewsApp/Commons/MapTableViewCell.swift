@@ -6,9 +6,12 @@ class MapTableViewCell: UITableViewCell {
     static let identifier = "mapCell"
     var parent: UIViewController?
     
-    var viewModels = [MapCollectionViewModel]()
+    var viewModel = MapTableCellViewModel()
+    
+    var newsViewModels = [MapCollectionViewModel]()
     var articles = [Article]()
     var cityName = ""
+    
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -24,6 +27,18 @@ class MapTableViewCell: UITableViewCell {
         contentView.addSubview(collectionView)
         collectionView.dataSource = self
         collectionView.delegate = self
+        viewModel.articles.bind { [weak self] articles in
+            self?.articles = articles
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+            }
+          }
+        viewModel.newsViewModels.bind { [weak self] newsViewModels in
+            self?.newsViewModels = newsViewModels
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+            }
+          }
         addConstraints()
     }
     
@@ -55,47 +70,16 @@ class MapTableViewCell: UITableViewCell {
 extension MapTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MapCollectionCell.identifier, for: indexPath) as! MapCollectionCell
-//        print(viewModels)
-        cell.configureTile(with: viewModels[indexPath.row])
+        cell.configureTile(with: newsViewModels[indexPath.row])
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModels.count
+        return newsViewModels.count
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: contentView.frame.width, height: contentView.frame.height)
     }
-    func fetchData(){
-        let formattedCityName = cityName.trimmingCharacters(in: NSCharacterSet.whitespaces).replacingOccurrences(of: " ", with: "-")
-        if(formattedCityName == ""){
-            self.viewModels.removeAll()
-            self.articles.removeAll()
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-            return
-        }
-        APIservices.shared.getQueryHeadlines(queryText: formattedCityName){ [weak self] result in
-            switch result {
-            case .success(let articles):
-                print(articles)
-                self?.articles = articles
-                self?.viewModels = articles.compactMap({
-                    MapCollectionViewModel(
-                        title: $0.title,
-                        subTitle: $0.description ?? "No Description",
-                        imageURL: URL(string: $0.urlToImage ?? "")
-                    )
-                })
-                DispatchQueue.main.async {
-                    self?.collectionView.reloadData()
-                }
-            case .failure(let error):
-                print(error)
-                
-            }
-        }
-    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let url = URL(string: articles[indexPath.row].url ?? "" ) else {
             return
