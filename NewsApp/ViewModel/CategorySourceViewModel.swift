@@ -1,5 +1,3 @@
-import UIKit.UIImage
-
 public class CategorySourceViewModel {
     let defaultText = "business"    
     var sources = Box([SourceTableViewCellViewModel]())

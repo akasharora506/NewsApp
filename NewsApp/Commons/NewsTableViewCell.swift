@@ -1,4 +1,5 @@
 import UIKit
+import SDWebImage
 
 class NewsTableViewCellViewModel {
     let title: String
@@ -90,19 +91,6 @@ class NewsTableViewCell: UITableViewCell {
     func configure(with viewModel: NewsTableViewCellViewModel){
         newsHeadline.text = viewModel.title
         newsSubline.text = viewModel.subTitle
-        if let data = viewModel.imageData {
-            newsImage.image = UIImage(data: data)
-        }else if let url = viewModel.imageURL {
-            URLSession.shared.dataTask(with: url){data, _, error in
-                guard let data = data, error == nil else {
-                    return
-                }
-                viewModel.imageData = data
-                DispatchQueue.main.async {
-                    self.newsImage.image = UIImage(data: data)
-                }
-                
-            }.resume()
-        }
+        newsImage.sd_setImage(with: viewModel.imageURL)
     }
 }

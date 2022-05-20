@@ -1,5 +1,4 @@
 import UIKit
-import SafariServices
 
 class MapTableViewCell: UITableViewCell {
     
@@ -84,7 +83,7 @@ extension MapTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource
         guard let url = URL(string: articles[indexPath.row].url ?? "" ) else {
             return
         }
-        let vc = SFSafariViewController(url: url)
+        let vc = WebViewController(url: url, title: articles[indexPath.row].source.name)
         parent?.navigationController?.pushViewController(vc, animated: true)
     }
 }

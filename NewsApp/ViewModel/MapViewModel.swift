@@ -1,4 +1,3 @@
-import UIKit.UIImage
 import CoreLocation
 
 public class MapViewModel {

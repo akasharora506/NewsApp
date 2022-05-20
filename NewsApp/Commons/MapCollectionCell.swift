@@ -1,4 +1,5 @@
 import UIKit
+import SDWebImage
 
 class MapCollectionViewModel {
     let title: String
@@ -54,20 +55,7 @@ class MapCollectionCell: UICollectionViewCell {
     func configureTile(with viewModel: MapCollectionViewModel){
         newsHeadline.text = viewModel.title
         newsSubline.text = viewModel.subTitle
-        if let data = viewModel.imageData {
-            newsImage.image = UIImage(data: data)
-        }else if let url = viewModel.imageURL {
-            URLSession.shared.dataTask(with: url){data, _, error in
-                guard let data = data, error == nil else {
-                    return
-                }
-                viewModel.imageData = data
-                DispatchQueue.main.async {
-                    self.newsImage.image = UIImage(data: data)
-                }
-                
-            }.resume()
-        }
+        newsImage.sd_setImage(with: viewModel.imageURL)
     }
     func addConstraints(){
         var constraints = [NSLayoutConstraint]()

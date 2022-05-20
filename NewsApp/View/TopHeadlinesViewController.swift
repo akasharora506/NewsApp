@@ -1,5 +1,4 @@
 import UIKit
-import SafariServices
 
 class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
@@ -42,11 +41,20 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Top Headlines"
+        
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.identifier)
         tableView.dataSource = self
         tableView.delegate = self
         view.backgroundColor = .white
         view.addSubview(tableView)
+        
+        let stackView = UIStackView(arrangedSubviews: [prevButton,bottomPagination,nextButton])
+        stackView.axis = .horizontal
+        stackView.distribution = .equalSpacing
+        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+        stackView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 50)
+        tableView.tableFooterView = stackView
         viewModel.articles.bind { [weak self] articles in
             self?.articles = articles
             DispatchQueue.main.async {
@@ -94,20 +102,9 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
         var constraints = [NSLayoutConstraint]()
         
         constraints.append(tableView.topAnchor.constraint(equalTo: view.topAnchor))
-        constraints.append(tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor,constant: -100))
+        constraints.append(tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
         constraints.append(tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor))
         constraints.append(tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor))
-        
-        let stackView = UIStackView(arrangedSubviews: [prevButton,bottomPagination,nextButton])
-        stackView.axis = .horizontal
-        stackView.distribution = .equalSpacing
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(stackView)
-        
-        constraints.append(stackView.topAnchor.constraint(equalTo: tableView.bottomAnchor))
-        constraints.append(stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
-        constraints.append(stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 10))
-        constraints.append(stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -10))
         
         NSLayoutConstraint.activate(constraints)
     }
@@ -130,8 +127,8 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
         guard let url = URL(string: articles[indexPath.row].url ?? "" ) else {
             return
         }
-        let vc = SFSafariViewController(url: url)
-        present(vc, animated: true)
+        let vc = WebViewController(url: url, title: articles[indexPath.row].source.name)
+        navigationController?.pushViewController(vc, animated: true)
     }
     func createSpinner()->UIView{
         let layerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))

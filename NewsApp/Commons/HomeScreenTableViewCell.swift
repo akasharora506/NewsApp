@@ -2,9 +2,10 @@ import UIKit
 
 protocol ButtonDelegate{
     func onButtonTap(at index:IndexPath)
+    func onSearchTextChange(newText: String)
 }
 
-class TableViewCell: UITableViewCell {
+class HomeScreenTableViewCell: UITableViewCell {
     
     static let identifier = "customCell"
     var delegate:ButtonDelegate!
@@ -38,9 +39,13 @@ class TableViewCell: UITableViewCell {
         contentView.addSubview(searchBar)
         contentView.addSubview(button)
         button.addTarget(self, action: #selector(onButtonTap(sender:)), for: .touchUpInside)
+        searchBar.addTarget(self, action: #selector(onSearchTextChange(sender:)), for: .editingChanged)
     }
     @objc func onButtonTap(sender: Any){
         self.delegate?.onButtonTap(at: indexPath)
+    }
+    @objc func onSearchTextChange(sender: Any){
+        self.delegate?.onSearchTextChange(newText: searchBar.text ?? "")
     }
     
     override func prepareForReuse() {
@@ -60,22 +65,16 @@ class TableViewCell: UITableViewCell {
     func addConstraints(){
         var constraints = [NSLayoutConstraint]()
         
-        //constraints for labeltext
-        constraints.append(labelText.leadingAnchor.constraint(equalTo: contentView.leadingAnchor))
-        constraints.append(labelText.trailingAnchor.constraint(equalTo: contentView.trailingAnchor))
-        constraints.append(labelText.topAnchor.constraint(equalTo: contentView.topAnchor))
-        constraints.append(labelText.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.33))
-        
         //constraints for searchbar
         constraints.append(searchBar.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,constant: 10))
         constraints.append(searchBar.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,constant: -10))
-        constraints.append(searchBar.topAnchor.constraint(equalTo: labelText.bottomAnchor))
+        constraints.append(searchBar.bottomAnchor.constraint(equalTo: button.topAnchor))
         constraints.append(searchBar.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.33))
         
         //constraints for action button
         constraints.append(button.centerXAnchor.constraint(equalTo: contentView.centerXAnchor))
-        constraints.append(button.topAnchor.constraint(equalTo: searchBar.bottomAnchor))
-        constraints.append(button.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.33))
+        constraints.append(button.bottomAnchor.constraint(equalTo: contentView.bottomAnchor))
+        constraints.append(button.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.5))
         constraints.append(button.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5))
         
         NSLayoutConstraint.activate(constraints)
@@ -83,6 +82,5 @@ class TableViewCell: UITableViewCell {
     
     public func configureButton(labelName: String, buttonName: String){
         button.setTitle(buttonName, for: .normal)
-        labelText.text = labelName
     }
 }

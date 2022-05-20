@@ -1,5 +1,4 @@
 import UIKit
-import SafariServices
 
 class SearchViewController: UIViewController {
     var searchText = ""
@@ -8,7 +7,7 @@ class SearchViewController: UIViewController {
     
     private var searchViewModels = [NewsTableViewCellViewModel]()
     private var articles = [Article]()
-    private var viewModel = SearchViewModel()
+    var viewModel = SearchViewModel()
     
     let tableView: UITableView = {
         let tableView = UITableView()
@@ -75,8 +74,8 @@ extension SearchViewController : UITableViewDataSource, UITableViewDelegate {
         guard let url = URL(string: articles[indexPath.row].url ?? "" ) else {
             return
         }
-        let vc = SFSafariViewController(url: url)
-        present(vc, animated: true)
+        let vc = WebViewController(url: url, title: articles[indexPath.row].source.name)
+        navigationController?.pushViewController(vc, animated: true)
     }
     func createSpinner()->UIView{
         let layerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
