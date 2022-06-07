@@ -36,6 +36,7 @@
 		1DC307BD2811547000826D2A /* NewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC307BC2811547000826D2A /* NewsTableViewCell.swift */; };
 		1DC317A52834D440002415CC /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC317A42834D440002415CC /* WebViewController.swift */; };
 		1DC3EC052812A709004C0564 /* CategorySourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC3EC042812A709004C0564 /* CategorySourceViewController.swift */; };
+		1DC905DC284F1E9B0013F227 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1DC905DE284F1E9B0013F227 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -83,6 +84,7 @@
 		1DC307BC2811547000826D2A /* NewsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
 		1DC317A42834D440002415CC /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		1DC3EC042812A709004C0564 /* CategorySourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySourceViewController.swift; sourceTree = "<group>"; };
+		1DC905DD284F1E9B0013F227 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1DF619AE2824F9220042DF37 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		5879236B0A4481B74E620A7C /* Pods_NewsApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NewsApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BCA14D8E3733471F5CCDA3E /* Pods-NewsApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsApp.release.xcconfig"; path = "Target Support Files/Pods-NewsApp/Pods-NewsApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 		1D010335280425B500B8CFC3 /* NewsApp */ = {
 			isa = PBXGroup;
 			children = (
+				1DC905DE284F1E9B0013F227 /* Localizable.strings */,
 				1D22BC60282E4D2200886805 /* Utilities */,
 				1D156EEC282B9BF700DF441B /* ViewModel */,
 				1D156EEB282B9BF000DF441B /* Model */,
@@ -252,6 +255,7 @@
 				0DB93E4985C2CE3E0A40C5A3 /* [CP] Embed Pods Frameworks */,
 				227D78EE8C0A6532795C3187 /* [CP] Copy Pods Resources */,
 				1D37BA272836302200E3A5F1 /* Embed Frameworks */,
+				1D8C063E28382BC9003293A8 /* Swiftlint */,
 			);
 			buildRules = (
 			);
@@ -301,6 +305,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D010343280425B500B8CFC3 /* LaunchScreen.storyboard in Resources */,
+				1DC905DC284F1E9B0013F227 /* Localizable.strings in Resources */,
 				1D010340280425B500B8CFC3 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -324,6 +329,24 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NewsApp/Pods-NewsApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		1D8C063E28382BC9003293A8 /* Swiftlint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Swiftlint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		227D78EE8C0A6532795C3187 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -407,6 +430,14 @@
 				1D010342280425B500B8CFC3 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		1DC905DE284F1E9B0013F227 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1DC905DD284F1E9B0013F227 /* en */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -545,7 +576,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -576,7 +607,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

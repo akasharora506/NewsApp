@@ -4,7 +4,6 @@ import WebKit
 class WebViewController: UIViewController {
 
     private let url: URL
-    
     private let webView: WKWebView = {
         let preferences = WKWebpagePreferences()
         preferences.allowsContentJavaScript = true
@@ -13,13 +12,11 @@ class WebViewController: UIViewController {
         let webView = WKWebView(frame: .zero, configuration: configuration)
         return webView
     }()
-    
-    init(url: URL,title: String){
+    init(url: URL,title: String) {
         self.url = url
         super.init(nibName: nil, bundle: nil)
         self.title = title
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -31,14 +28,14 @@ class WebViewController: UIViewController {
         webView.frame = view.bounds
         configureButtons()
     }
-    private func configureButtons(){
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(didTapDone))
+    private func configureButtons() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Done"), style: .done, target: self, action: #selector(didTapDone))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(didTapRefresh))
     }
-    @objc func didTapDone(){
+    @objc func didTapDone() {
         navigationController?.popViewController(animated: true)
     }
-    @objc func didTapRefresh(){
+    @objc func didTapRefresh() {
         webView.load(URLRequest(url: url))
     }
 }

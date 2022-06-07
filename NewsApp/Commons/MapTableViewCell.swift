@@ -1,26 +1,22 @@
 import UIKit
 
-class MapTableViewCell: UITableViewCell {
-    
+class MapTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     static let identifier = "mapCell"
     var parent: UIViewController?
-    
     var viewModel = MapTableCellViewModel()
-    
     var newsViewModels = [MapCollectionViewModel]()
     var articles = [Article]()
     var cityName = ""
-    
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.sectionInset = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(MapCollectionCell.self, forCellWithReuseIdentifier: MapCollectionCell.identifier)
+        collectionView.register(MapCollectionCell.self,
+                                forCellWithReuseIdentifier: MapCollectionCell.identifier)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(collectionView)
@@ -40,35 +36,27 @@ class MapTableViewCell: UITableViewCell {
           }
         addConstraints()
     }
-    
-    func addConstraints(){
+    func addConstraints() {
         var constraints = [NSLayoutConstraint]()
-        
         constraints.append(collectionView.topAnchor.constraint(equalTo: contentView.topAnchor))
         constraints.append(collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,constant: -25))
         constraints.append(collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor))
         constraints.append(collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor))
-        
         NSLayoutConstraint.activate(constraints)
     }
-    
     override func prepareForReuse() {
         super.prepareForReuse()
     }
-    
     override func layoutSubviews() {
         super.layoutSubviews()
-        
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-}
-extension MapTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MapCollectionCell.identifier, for: indexPath) as! MapCollectionCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MapCollectionCell.identifier, for: indexPath) as? MapCollectionCell else {
+            return UICollectionViewCell()
+        }
         cell.configureTile(with: newsViewModels[indexPath.row])
         return cell
     }
@@ -78,12 +66,11 @@ extension MapTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: contentView.frame.width, height: contentView.frame.height)
     }
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let url = URL(string: articles[indexPath.row].url ?? "" ) else {
+        guard let articleURL = URL(string: articles[indexPath.row].url ?? "" ) else {
             return
         }
-        let vc = WebViewController(url: url, title: articles[indexPath.row].source.name)
-        parent?.navigationController?.pushViewController(vc, animated: true)
+        let webVC = WebViewController(url: articleURL, title: articles[indexPath.row].source.name)
+        parent?.navigationController?.pushViewController(webVC, animated: true)
     }
 }

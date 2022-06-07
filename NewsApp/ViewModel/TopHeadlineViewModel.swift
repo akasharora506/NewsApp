@@ -2,15 +2,12 @@ import UIKit.UIImage
 import CoreData
 
 public class TopHeadlineViewModel {
-    
     var topHeadlineViewModels = Box([NewsTableViewCellViewModel]())
     var articles = Box([Article]())
     var totalArticles = Box(0)
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    
-    func fetchData(currentPage: Int, selectedSource: String){
-        APIservices.shared.getTopHeadlines(pageNumber: currentPage, sources: selectedSource ){
-            [weak self] result, countArticles in
+    let context = (UIApplication.shared.delegate as? AppDelegate ?? AppDelegate()).persistentContainer.viewContext
+    func fetchData(currentPage: Int, selectedSource: String) {
+        APIservices.shared.getTopHeadlines(pageNumber: currentPage, sources: selectedSource ) { [weak self] result, countArticles in
             self?.totalArticles.value = countArticles
             switch result {
             case .success(let articles):
@@ -22,24 +19,24 @@ public class TopHeadlineViewModel {
                         imageURL: URL(string: $0.urlToImage ?? "")
                     )
                 })
-                do{
-                    let articleItems = try self?.context.fetch(ArticleItem.fetchRequest()) as! [NSManagedObject]
-                    
-                    for item in articleItems{
-                        self?.context.delete(item)
-                        do{
-                            try self?.context.save()
-                        }catch {
-                            
-                        }
-        
+                do {
+                    guard let articleItems = try self?.context.fetch(ArticleItem.fetchRequest()) else {
+                        return
                     }
-                }catch{
-                    
+                    for item in articleItems {
+                        self?.context.delete(item)
+                        do {
+                            try self?.context.save()
+                        } catch {
+                        }
+                    }
+                } catch {
                 }
-                
-                for article in articles{
-                    let newArticle = ArticleItem(context: self!.context)
+                for article in articles {
+                    guard let currContext = self?.context else {
+                        return
+                    }
+                    let newArticle = ArticleItem(context: currContext)
                     newArticle.title = article.title
                     newArticle.publishedAt = article.publishedAt
                     newArticle.url = article.url
@@ -48,11 +45,10 @@ public class TopHeadlineViewModel {
                     newArticle.articleDescription = article.description
                     do {
                         try self?.context.save()
-                    }catch {
-                        
+                    } catch {
                     }
                 }
-            case .failure(_):
+            case .failure(let error):
                 do {
                     let articleItems = try self?.context.fetch(ArticleItem.fetchRequest())
                     self?.articles.value = (articleItems?.compactMap({
@@ -64,7 +60,7 @@ public class TopHeadlineViewModel {
                             urlToImage: $0.urlToImage,
                             publishedAt: $0.publishedAt
                         )
-                    }))!
+                    })) ?? []
                     self?.totalArticles.value = 10
                     self?.topHeadlineViewModels.value = (articleItems?.compactMap({
                         NewsTableViewCellViewModel(
@@ -72,13 +68,12 @@ public class TopHeadlineViewModel {
                             subTitle: $0.articleDescription ?? "No Description",
                             imageURL: URL(string: $0.urlToImage ?? "")
                         )
-                    }))!
-                    
-                }catch {
+                    })) ?? []
+                    print(error)
+                } catch {
                     print(error)
                 }
             }
         }
     }
-    
 }

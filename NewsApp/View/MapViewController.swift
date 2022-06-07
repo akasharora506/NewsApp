@@ -2,8 +2,7 @@ import UIKit
 import GoogleMaps
 import CoreLocation
 
-class MapViewController: UIViewController, UITableViewDelegate, CLLocationManagerDelegate, GMSMapViewDelegate {
-    
+class MapViewController: UIViewController, UITableViewDelegate, CLLocationManagerDelegate, UITableViewDataSource, GMSMapViewDelegate {
     let viewModel = MapViewModel()
     let manager = CLLocationManager()
     let marker = GMSMarker()
@@ -18,7 +17,7 @@ class MapViewController: UIViewController, UITableViewDelegate, CLLocationManage
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGray6
-        title = "News by Location"
+        title = NSLocalizedString("News by Location", comment: "News by Location")
         manager.delegate = self
         manager.requestWhenInUseAuthorization()
         manager.startUpdatingLocation()
@@ -37,14 +36,12 @@ class MapViewController: UIViewController, UITableViewDelegate, CLLocationManage
         addConstraints()
     }
 
-    func addConstraints(){
+    func addConstraints() {
         var constraints = [NSLayoutConstraint]()
-        
         constraints.append(tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor,constant: -20))
         constraints.append(tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 10))
         constraints.append(tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -10))
         constraints.append(tableView.heightAnchor.constraint(equalToConstant: 250))
-        
         NSLayoutConstraint.activate(constraints)
     }
 
@@ -64,22 +61,17 @@ class MapViewController: UIViewController, UITableViewDelegate, CLLocationManage
         marker.map = mapView
         manager.stopUpdatingLocation()
     }
-    
     func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
         viewModel.updateCity(currLocation: CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude))
         marker.position = coordinate
         marker.map = mapView
     }
-}
-
-extension MapViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return tableView.frame.height - 50
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MapTableViewCell.identifier, for: indexPath) as? MapTableViewCell else {
             return UITableViewCell()
@@ -95,7 +87,7 @@ extension MapViewController: UITableViewDataSource {
         let headerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.width, height: 50))
 
         let label = UILabel()
-        label.text = self.cityName != "" ? "Results for \(self.cityName)" : "No Results"
+        label.text = self.cityName != "" ? NSLocalizedString("Results for ", comment: "Results for ")+self.cityName : NSLocalizedString("No Results", comment: "No Results")
         label.frame = CGRect.init(x: 5, y: 5, width: headerView.frame.width-10, height: headerView.frame.height-10)
         label.textAlignment = .center
         label.textColor = .black
