@@ -3,19 +3,14 @@ import CoreLocation
 public class MapTableCellViewModel {
     var newsViewModels = Box([MapCollectionViewModel]())
     var articles = Box([Article]())
-    
-    func fetchData(cityName: String){
-        
+    func fetchData(cityName: String) {
         let formattedCityName = cityName.trimmingCharacters(in: NSCharacterSet.whitespaces).replacingOccurrences(of: " ", with: "-")
-        
-        if(formattedCityName == ""){
+        if(formattedCityName == "") {
             self.newsViewModels.value.removeAll()
             self.articles.value.removeAll()
-            
             return
         }
-        
-        APIservices.shared.getQueryHeadlines(queryText: formattedCityName){ [weak self] result in
+        APIservices.shared.getQueryHeadlines(queryText: formattedCityName) { [weak self] result in
             switch result {
             case .success(let articles):
                 print(articles)
@@ -29,9 +24,7 @@ public class MapTableCellViewModel {
                 })
             case .failure(let error):
                 print(error)
-                
             }
         }
     }
-    
 }

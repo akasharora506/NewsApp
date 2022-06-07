@@ -1,14 +1,12 @@
 import UIKit
 
-class SearchViewController: UIViewController {
+class SearchViewController: UIViewController, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate {
     var searchText = ""
     var selectedSource = ""
     var currentPage = 1
-    
     private var searchViewModels = [NewsTableViewCellViewModel]()
     private var articles = [Article]()
     var viewModel = SearchViewModel()
-    
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -39,24 +37,19 @@ class SearchViewController: UIViewController {
         viewModel.fetchData(searchText: searchText, currentPage: currentPage, selectedSource: selectedSource)
         addConstraints()
     }
-    func addConstraints(){
+    func addConstraints() {
         var constraints = [NSLayoutConstraint]()
-        
-        
         constraints.append(tableView.topAnchor.constraint(equalTo: view.topAnchor))
         constraints.append(tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
         constraints.append(tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor))
         constraints.append(tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor))
-        
         NSLayoutConstraint.activate(constraints)
     }
 
-    func configureHeader(queryText: String, sourceName: String){
+    func configureHeader(queryText: String, sourceName: String) {
         searchText = queryText
         title = "\(sourceName) Results for \(queryText)"
     }
-}
-extension SearchViewController : UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return searchViewModels.count
     }
@@ -71,13 +64,13 @@ extension SearchViewController : UITableViewDataSource, UITableViewDelegate {
         return 150
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let url = URL(string: articles[indexPath.row].url ?? "" ) else {
+        guard let articleURL = URL(string: articles[indexPath.row].url ?? "" ) else {
             return
         }
-        let vc = WebViewController(url: url, title: articles[indexPath.row].source.name)
-        navigationController?.pushViewController(vc, animated: true)
+        let webVC = WebViewController(url: articleURL, title: articles[indexPath.row].source.name)
+        navigationController?.pushViewController(webVC, animated: true)
     }
-    func createSpinner()->UIView{
+    func createSpinner() -> UIView {
         let layerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
         let spinner = UIActivityIndicatorView()
         spinner.center = layerView.center
@@ -86,18 +79,14 @@ extension SearchViewController : UITableViewDataSource, UITableViewDelegate {
         spinner.startAnimating()
         return layerView
     }
-    
-}
-
-extension SearchViewController: UIScrollViewDelegate{
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if(scrollView.contentOffset.y > tableView.contentSize.height - 100 - scrollView.frame.height){
+        if(scrollView.contentOffset.y > tableView.contentSize.height - 100 - scrollView.frame.height) {
             currentPage+=1
             self.tableView.tableFooterView = createSpinnerFooter()
             self.viewModel.fetchData(searchText: self.searchText, currentPage: self.currentPage, selectedSource: self.selectedSource)
         }
     }
-    private func createSpinnerFooter()->UIView{
+    private func createSpinnerFooter() -> UIView {
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 100))
         let spinner = UIActivityIndicatorView()
         spinner.center = footerView.center

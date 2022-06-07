@@ -1,14 +1,12 @@
 public class CategorySourceViewModel {
-    let defaultText = "business"    
+    let defaultText = "business"
     var sources = Box([SourceTableViewCellViewModel]())
     init() {
         fetchSources(title: self.defaultText)
     }
 
-    
-    func fetchSources(title: String){
-        APIservices.shared.getSources(for: title){
-            [weak self] result in
+    func fetchSources(title: String) {
+        APIservices.shared.getSources(for: title) { [weak self] result in
             switch result {
             case .success(let sources):
                 self?.sources.value = sources.compactMap({
@@ -18,12 +16,9 @@ public class CategorySourceViewModel {
                         description:  $0.description ?? "No Description"
                     )
                 })
-                
             case .failure(let error):
                 print(error)
             }
-           
         }
     }
-    
 }

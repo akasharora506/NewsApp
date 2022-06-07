@@ -5,13 +5,12 @@ class MapCollectionViewModel {
     let title: String
     let subTitle: String
     let imageURL: URL?
-    var imageData: Data? = nil
-    
+    var imageData: Data?
     init(
         title: String,
         subTitle: String,
         imageURL: URL?
-    ){
+    ) {
         self.title = title
         self.subTitle = subTitle
         self.imageURL = imageURL
@@ -52,18 +51,17 @@ class MapCollectionCell: UICollectionViewCell {
         contentView.addSubview(newsSubline)
         addConstraints()
     }
-    func configureTile(with viewModel: MapCollectionViewModel){
+    func configureTile(with viewModel: MapCollectionViewModel) {
         newsHeadline.text = viewModel.title
         newsSubline.text = viewModel.subTitle
         newsImage.sd_setImage(with: viewModel.imageURL)
     }
-    func addConstraints(){
+    func addConstraints() {
         var constraints = [NSLayoutConstraint]()
         constraints.append(newsHeadline.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5))
         constraints.append(newsHeadline.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10))
         constraints.append(newsHeadline.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.6,constant: -10))
         constraints.append(newsHeadline.heightAnchor.constraint(equalToConstant: 45))
-        
         constraints.append(newsSubline.topAnchor.constraint(equalTo: newsHeadline.bottomAnchor, constant: 5))
         constraints.append(newsSubline.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10))
         constraints.append(newsSubline.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.6,constant: -10))
@@ -76,9 +74,7 @@ class MapCollectionCell: UICollectionViewCell {
         constraints.append(newsImage.leadingAnchor.constraint(equalTo: newsHeadline.trailingAnchor, constant: 5))
         NSLayoutConstraint.activate(constraints)
     }
-        
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }

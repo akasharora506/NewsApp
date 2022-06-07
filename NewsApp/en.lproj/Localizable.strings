@@ -1,0 +1,29 @@
+/*
+  Localizable.strings
+  NewsApp
+
+  Created by Akash Arora on 07/06/22.
+  
+*/
+"Term Search" = "Term Search";
+"News by Location" = "News by Location";
+"Top Headlines" = "Top Headlines";
+"Apple News" = "Apple News";
+"Search" = "Search";
+"View Map" = "View Map";
+"View Top Headlines" = "View Top Headlines";
+"Dismiss" = "Dismiss";
+"business" = "business";
+"entertainment" = "entertainment";
+"general" = "general";
+"health" = "health";
+"science" = "science";
+"sports" = "sports";
+"technology" = "technology";
+"SKIP (SEARCH ALL SOURCE)" = "SKIP (SEARCH ALL SOURCE)";
+"Search for " = "Search for ";
+"No Results" = "No Results";
+"Results for " = "Results for ";
+"Next" = "Next";
+"Prev" = "Prev";
+"Done" = "Done";

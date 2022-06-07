@@ -1,10 +1,9 @@
-//Models
 struct APIrespones: Codable {
     let totalResults: Int
-    let articles: Array<Article>
+    let articles: [Article]
 }
-// Article Model
-struct Article: Codable{
+
+struct Article: Codable {
     let source: Source
     let title: String
     let description: String?
@@ -12,9 +11,7 @@ struct Article: Codable{
     let urlToImage: String?
     let publishedAt: String?
 }
-// Source Model
-struct Source: Codable{
+
+struct Source: Codable {
     let name: String
 }
-
-
