@@ -1,11 +1,12 @@
 public class CategorySourceViewModel {
     let defaultText = "business"
     var sources = Box([SourceTableViewCellViewModel]())
+    var onErrorHandling : ((Error) -> Void)?
     init() {
         fetchSources(title: self.defaultText)
     }
 
-    func fetchSources(title: String) {
+    func fetchSources(title: String,completion: ((Result<Bool, Error>) -> Void)? = nil) {
         APIservices.shared.getSources(for: title) { [weak self] result in
             switch result {
             case .success(let sources):
@@ -18,6 +19,7 @@ public class CategorySourceViewModel {
                 })
             case .failure(let error):
                 print(error)
+                self?.onErrorHandling?(error)
             }
         }
     }

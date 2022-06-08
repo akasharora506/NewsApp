@@ -2,7 +2,7 @@
 //  ArticleItem+CoreDataClass.swift
 //  
 //
-//  Created by Akash Arora on 20/05/22.
+//  Created by Akash Arora on 08/06/22.
 //
 //
 

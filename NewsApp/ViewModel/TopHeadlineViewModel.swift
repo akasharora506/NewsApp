@@ -5,8 +5,9 @@ public class TopHeadlineViewModel {
     var topHeadlineViewModels = Box([NewsTableViewCellViewModel]())
     var articles = Box([Article]())
     var totalArticles = Box(0)
+    var onErrorHandling : ((Error) -> Void)?
     let context = (UIApplication.shared.delegate as? AppDelegate ?? AppDelegate()).persistentContainer.viewContext
-    func fetchData(currentPage: Int, selectedSource: String) {
+    func fetchData(currentPage: Int, selectedSource: String,completion: ((Result<Bool, Error>) -> Void)? = nil) {
         APIservices.shared.getTopHeadlines(pageNumber: currentPage, sources: selectedSource ) { [weak self] result, countArticles in
             self?.totalArticles.value = countArticles
             switch result {
@@ -43,6 +44,7 @@ public class TopHeadlineViewModel {
                     newArticle.urlToImage = article.urlToImage
                     newArticle.sourceName = article.source.name
                     newArticle.articleDescription = article.description
+                    newArticle.queryText = "TopHeadlines"
                     do {
                         try self?.context.save()
                     } catch {
@@ -50,7 +52,10 @@ public class TopHeadlineViewModel {
                 }
             case .failure(let error):
                 do {
-                    let articleItems = try self?.context.fetch(ArticleItem.fetchRequest())
+                    let request = ArticleItem.fetchRequest() as NSFetchRequest<ArticleItem>
+                    let pred = NSPredicate(format: "queryText == 'TopHeadlines'")
+                    request.predicate = pred
+                    let articleItems = try self?.context.fetch(request)
                     self?.articles.value = (articleItems?.compactMap({
                         Article(
                             source: Source(name: $0.sourceName ?? ""),
@@ -71,7 +76,7 @@ public class TopHeadlineViewModel {
                     })) ?? []
                     print(error)
                 } catch {
-                    print(error)
+                    self?.onErrorHandling?(error)
                 }
             }
         }

@@ -34,6 +34,11 @@ class MapTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionV
                 self?.collectionView.reloadData()
             }
           }
+        viewModel.onErrorHandling = { error in
+            let alert = UIAlertController(title: "Error", message: error.localizedDescription , preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment: "Dismiss"), style: .default, handler: nil))
+            self.parent?.present(alert, animated: true, completion: nil)
+        }
         addConstraints()
     }
     func addConstraints() {

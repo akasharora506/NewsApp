@@ -58,6 +58,11 @@ class CategorySourceViewController: UIViewController, UITableViewDelegate, UITab
                 self?.tableView.reloadData()
             }
           }
+        viewModel.onErrorHandling = { error in
+            let alert = UIAlertController(title: "Error", message: error.localizedDescription , preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment: "Dismiss"), style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didOpenMenu))
         gesture.numberOfTapsRequired = 1
         gesture.numberOfTouchesRequired = 1

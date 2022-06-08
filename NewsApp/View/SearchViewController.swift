@@ -34,6 +34,11 @@ class SearchViewController: UIViewController, UIScrollViewDelegate, UITableViewD
                 self?.tableView.tableFooterView = nil
             }
           }
+        viewModel.onErrorHandling = { error in
+            let alert = UIAlertController(title: "Error", message: error.localizedDescription , preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment: "Dismiss"), style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
         viewModel.fetchData(searchText: searchText, currentPage: currentPage, selectedSource: selectedSource)
         addConstraints()
     }
@@ -80,7 +85,7 @@ class SearchViewController: UIViewController, UIScrollViewDelegate, UITableViewD
         return layerView
     }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if(scrollView.contentOffset.y > tableView.contentSize.height - 100 - scrollView.frame.height) {
+        if(scrollView.contentOffset.y > 0.8*tableView.contentSize.height - scrollView.frame.height) {
             currentPage+=1
             self.tableView.tableFooterView = createSpinnerFooter()
             self.viewModel.fetchData(searchText: self.searchText, currentPage: self.currentPage, selectedSource: self.selectedSource)

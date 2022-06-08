@@ -57,14 +57,21 @@ class HomeScreenTableViewCell: UITableViewCell {
     }
     func addConstraints() {
         var constraints = [NSLayoutConstraint]()
-        constraints.append(searchBar.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,constant: 10))
-        constraints.append(searchBar.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,constant: -10))
-        constraints.append(searchBar.bottomAnchor.constraint(equalTo: button.topAnchor))
-        constraints.append(searchBar.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.33))
-        constraints.append(button.centerXAnchor.constraint(equalTo: contentView.centerXAnchor))
-        constraints.append(button.bottomAnchor.constraint(equalTo: contentView.bottomAnchor))
-        constraints.append(button.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.5))
-        constraints.append(button.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5))
+        if(!searchBar.isHidden) {
+            constraints.append(searchBar.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,constant: 10))
+            constraints.append(searchBar.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,constant: -10))
+            constraints.append(searchBar.bottomAnchor.constraint(equalTo: button.topAnchor))
+            constraints.append(searchBar.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.33))
+            constraints.append(button.centerXAnchor.constraint(equalTo: contentView.centerXAnchor))
+            constraints.append(button.bottomAnchor.constraint(equalTo: contentView.bottomAnchor))
+            constraints.append(button.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.5))
+            constraints.append(button.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5))
+        } else {
+            constraints.append(button.centerXAnchor.constraint(equalTo: contentView.centerXAnchor))
+            constraints.append(button.centerYAnchor.constraint(equalTo: contentView.centerYAnchor))
+            constraints.append(button.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.5))
+            constraints.append(button.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5))
+        }
         NSLayoutConstraint.activate(constraints)
     }
     public func configureButton(labelName: String, buttonName: String) {

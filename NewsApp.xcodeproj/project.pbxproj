@@ -23,6 +23,7 @@
 		1D22BC6B282E651400886805 /* TopHeadlineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D22BC6A282E651400886805 /* TopHeadlineViewModel.swift */; };
 		1D22BC6D282E676900886805 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D22BC6C282E676900886805 /* MapViewModel.swift */; };
 		1D22BC6F282E6C4200886805 /* MapTableCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D22BC6E282E6C4200886805 /* MapTableCellViewModel.swift */; };
+		1D23967E28508AF20038E3AF /* DataContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1D23967C28508AF20038E3AF /* DataContainer.xcdatamodeld */; };
 		1D3128F7280C256300498FB9 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3128F6280C256300498FB9 /* MapViewController.swift */; };
 		1D3128F9280FD32000498FB9 /* TopHeadlinesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3128F8280FD32000498FB9 /* TopHeadlinesViewController.swift */; };
 		1D37BA252836302200E3A5F1 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D37BA242836302200E3A5F1 /* SDWebImage.xcframework */; };
@@ -30,7 +31,6 @@
 		1D37BA2928364C9C00E3A5F1 /* Debouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D37BA2828364C9C00E3A5F1 /* Debouncer.swift */; };
 		1D49CB17280FE08F003211D7 /* MapTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D49CB16280FE08F003211D7 /* MapTableViewCell.swift */; };
 		1D610A0D281BE12500939A7A /* MapCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D610A0C281BE12500939A7A /* MapCollectionCell.swift */; };
-		1D91B0662836CEBD009E2E70 /* DataContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1D91B0642836CEBD009E2E70 /* DataContainer.xcdatamodeld */; };
 		1DC307B928114B8E00826D2A /* APIservices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC307B828114B8E00826D2A /* APIservices.swift */; };
 		1DC307BB281151C000826D2A /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC307BA281151C000826D2A /* SearchViewController.swift */; };
 		1DC307BD2811547000826D2A /* NewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC307BC2811547000826D2A /* NewsTableViewCell.swift */; };
@@ -71,6 +71,7 @@
 		1D22BC6A282E651400886805 /* TopHeadlineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopHeadlineViewModel.swift; sourceTree = "<group>"; };
 		1D22BC6C282E676900886805 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		1D22BC6E282E6C4200886805 /* MapTableCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTableCellViewModel.swift; sourceTree = "<group>"; };
+		1D23967D28508AF20038E3AF /* DataContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataContainer.xcdatamodel; sourceTree = "<group>"; };
 		1D3128F6280C256300498FB9 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		1D3128F8280FD32000498FB9 /* TopHeadlinesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopHeadlinesViewController.swift; sourceTree = "<group>"; };
 		1D37BA232836300B00E3A5F1 /* Carthage */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Carthage; sourceTree = "<group>"; };
@@ -78,7 +79,6 @@
 		1D37BA2828364C9C00E3A5F1 /* Debouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debouncer.swift; sourceTree = "<group>"; };
 		1D49CB16280FE08F003211D7 /* MapTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTableViewCell.swift; sourceTree = "<group>"; };
 		1D610A0C281BE12500939A7A /* MapCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCollectionCell.swift; sourceTree = "<group>"; };
-		1D91B0652836CEBD009E2E70 /* DataContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataContainer.xcdatamodel; sourceTree = "<group>"; };
 		1DC307B828114B8E00826D2A /* APIservices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIservices.swift; sourceTree = "<group>"; };
 		1DC307BA281151C000826D2A /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		1DC307BC2811547000826D2A /* NewsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
@@ -125,6 +125,7 @@
 		1D010335280425B500B8CFC3 /* NewsApp */ = {
 			isa = PBXGroup;
 			children = (
+				1D23967C28508AF20038E3AF /* DataContainer.xcdatamodeld */,
 				1DC905DE284F1E9B0013F227 /* Localizable.strings */,
 				1D22BC60282E4D2200886805 /* Utilities */,
 				1D156EEC282B9BF700DF441B /* ViewModel */,
@@ -137,7 +138,6 @@
 				1D010341280425B500B8CFC3 /* LaunchScreen.storyboard */,
 				1D01033F280425B500B8CFC3 /* Assets.xcassets */,
 				1D010344280425B500B8CFC3 /* Info.plist */,
-				1D91B0642836CEBD009E2E70 /* DataContainer.xcdatamodeld */,
 			);
 			path = NewsApp;
 			sourceTree = "<group>";
@@ -405,11 +405,11 @@
 				1D22BC69282E5CE500886805 /* SearchViewModel.swift in Sources */,
 				1D610A0D281BE12500939A7A /* MapCollectionCell.swift in Sources */,
 				1D22BC6B282E651400886805 /* TopHeadlineViewModel.swift in Sources */,
+				1D23967E28508AF20038E3AF /* DataContainer.xcdatamodeld in Sources */,
 				1D010337280425B500B8CFC3 /* AppDelegate.swift in Sources */,
 				1D22BC66282E4E5000886805 /* CategorySourceViewModel.swift in Sources */,
 				1D22BC6D282E676900886805 /* MapViewModel.swift in Sources */,
 				1D37BA2928364C9C00E3A5F1 /* Debouncer.swift in Sources */,
-				1D91B0662836CEBD009E2E70 /* DataContainer.xcdatamodeld in Sources */,
 				1D156EF0282BA17300DF441B /* Source.swift in Sources */,
 				1DC3EC052812A709004C0564 /* CategorySourceViewController.swift in Sources */,
 				1D49CB17280FE08F003211D7 /* MapTableViewCell.swift in Sources */,
@@ -646,12 +646,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		1D91B0642836CEBD009E2E70 /* DataContainer.xcdatamodeld */ = {
+		1D23967C28508AF20038E3AF /* DataContainer.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				1D91B0652836CEBD009E2E70 /* DataContainer.xcdatamodel */,
+				1D23967D28508AF20038E3AF /* DataContainer.xcdatamodel */,
 			);
-			currentVersion = 1D91B0652836CEBD009E2E70 /* DataContainer.xcdatamodel */;
+			currentVersion = 1D23967D28508AF20038E3AF /* DataContainer.xcdatamodel */;
 			path = DataContainer.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
