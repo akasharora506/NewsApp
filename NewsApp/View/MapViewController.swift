@@ -27,6 +27,11 @@ class MapViewController: UIViewController, UITableViewDelegate, CLLocationManage
                 self?.tableView.reloadData()
             }
           }
+        viewModel.onErrorHandling = { error in
+            let alert = UIAlertController(title: "Error", message: error.localizedDescription , preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment: "Dismiss"), style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
         viewModel.updateCity(currLocation: manager.location ?? CLLocation(latitude: 0, longitude: 0))
         tableView.register(MapTableViewCell.self, forCellReuseIdentifier: MapTableViewCell.identifier)
         tableView.delegate = self

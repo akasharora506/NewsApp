@@ -1,4 +1,5 @@
 import UIKit
+import DropDown
 class Component: UIView {
 
     let label = UILabel(frame: .zero)
@@ -27,7 +28,7 @@ class Component: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 }
-class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ButtonDelegate {
+class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ButtonDelegate {
     let headerName = [
     NSLocalizedString("Term Search", comment: "Term Search"),
     NSLocalizedString("News by Location", comment: "News by Location"),

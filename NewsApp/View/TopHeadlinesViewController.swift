@@ -77,6 +77,11 @@ class TopHeadlinesViewController: UIViewController, UITableViewDataSource, UITab
         viewModel.totalArticles.bind { [weak self] totalArticles in
             self?.totalArticles = totalArticles
           }
+        viewModel.onErrorHandling = { error in
+            let alert = UIAlertController(title: "Error", message: error.localizedDescription , preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment: "Dismiss"), style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
         viewModel.fetchData(currentPage: currentPage, selectedSource: selectedSource)
         nextButton.addTarget(self, action: #selector(onNextClick(sender:)), for: .touchUpInside)
         prevButton.addTarget(self, action: #selector(onPrevClick(sender:)), for: .touchUpInside)

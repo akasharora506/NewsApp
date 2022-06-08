@@ -3,7 +3,8 @@ import CoreLocation
 public class MapTableCellViewModel {
     var newsViewModels = Box([MapCollectionViewModel]())
     var articles = Box([Article]())
-    func fetchData(cityName: String) {
+    var onErrorHandling : ((Error) -> Void)?
+    func fetchData(cityName: String,completion: ((Result<Bool, Error>) -> Void)? = nil) {
         let formattedCityName = cityName.trimmingCharacters(in: NSCharacterSet.whitespaces).replacingOccurrences(of: " ", with: "-")
         if(formattedCityName == "") {
             self.newsViewModels.value.removeAll()
@@ -24,6 +25,7 @@ public class MapTableCellViewModel {
                 })
             case .failure(let error):
                 print(error)
+                self?.onErrorHandling?(error)
             }
         }
     }

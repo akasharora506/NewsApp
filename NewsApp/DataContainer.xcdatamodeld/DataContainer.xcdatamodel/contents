@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21E258" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="ArticleItem" representedClassName="ArticleItem" syncable="YES" codeGenerationType="class">
         <attribute name="articleDescription" optional="YES" attributeType="String"/>
         <attribute name="publishedAt" optional="YES" attributeType="String"/>
+        <attribute name="queryText" optional="YES" attributeType="String"/>
         <attribute name="sourceName" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="url" optional="YES" attributeType="String"/>
         <attribute name="urlToImage" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="SearchArticles" representedClassName="SearchArticles" syncable="YES" codeGenerationType="class">
+        <attribute name="article" optional="YES" attributeType="Transformable"/>
+        <attribute name="querySearch" optional="YES" attributeType="String"/>
     </entity>
     <entity name="SourceItem" representedClassName="SourceItem" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="String"/>
@@ -14,7 +19,8 @@
         <attribute name="sourceDescription" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="ArticleItem" positionX="-54" positionY="-9" width="128" height="119"/>
-        <element name="SourceItem" positionX="-63" positionY="-18" width="128" height="74"/>
+        <element name="ArticleItem" positionX="-54" positionY="-9" width="128" height="148"/>
+        <element name="SearchArticles" positionX="-290.3828125" positionY="114.0234375" width="128" height="73"/>
+        <element name="SourceItem" positionX="-219.234375" positionY="-67.375" width="128" height="74"/>
     </elements>
 </model>
